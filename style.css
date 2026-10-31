@@ -496,49 +496,55 @@ body { font-size: calc(1rem * var(--access-font-scale, 1)); }
 @media (max-width:640px) { .unit-converter-panel { grid-column:auto; } .unit-all-results { grid-template-columns:1fr; } .unit-converter-panel .two-inputs { grid-template-columns:1fr 1fr; } }
 
 
-/* Aurora Calculator Public V1.1: 左側の忍者AdMax縦長広告 */
-@media (min-width: 1101px) {
-  body { padding-left: 180px; }
-  .admax-sidebar {
-    position: fixed;
-    z-index: 20;
-    top: 16px;
-    left: 10px;
-    width: 160px;
-    min-height: 250px;
-    max-height: calc(100vh - 32px);
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 4px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-  }
-}
-@media (max-width: 1100px) {
-  .admax-sidebar {
-    position: relative;
-    width: min(100%, 180px);
-    min-height: 100px;
-    margin: 12px auto 0;
-    padding: 8px 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    overflow: hidden;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-  }
+/* Aurora Calculator Public V1.2: 左・右・下の忍者AdMax広告 */
+.admax-sidebar,
+.admax-bottom {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 8px 4px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
 }
 .admax-label {
   color: var(--muted);
   font-size: 10px;
   line-height: 1.4;
   letter-spacing: .04em;
+}
+@media (min-width: 1101px) {
+  body { padding-left: 180px; padding-right: 180px; }
+  .admax-sidebar {
+    position: fixed;
+    z-index: 20;
+    top: 16px;
+    width: 160px;
+    min-height: 250px;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+  }
+  .admax-left { left: 10px; }
+  .admax-right { right: 10px; }
+  .admax-bottom {
+    width: min(100% - 28px, 970px);
+    min-height: 90px;
+    margin: 0 auto 20px;
+  }
+}
+@media (max-width: 1100px) {
+  .admax-sidebar { display: none; }
+  .admax-bottom {
+    width: min(calc(100% - 24px), 970px);
+    min-height: 90px;
+    margin: 0 auto 18px;
+    overflow: hidden;
+  }
+}
+@media (max-width: 520px) {
+  .admax-bottom { width: calc(100% - 16px); padding: 6px 2px; }
 }
