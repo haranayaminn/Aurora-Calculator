@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#eef3fb" name="theme-color"/>
+<title>Aurora 高機能電卓 V10</title>
+<link href="style.css" rel="stylesheet"/>
+<script defer="" src="script.js"></script>
+</head>
+<body>
+<header class="app-header">
+<div class="brand">
+<div aria-hidden="true" class="brand-mark">&sum;</div>
+<div>
+<h1>Aurora 高機能電卓</h1>
+<p>計算・変換・分析をひとつに</p>
+</div>
+</div>
+<div class="header-actions">
+<label class="mode-control" for="angleMode">角度</label>
+<select aria-label="三角関数の角度単位" id="angleMode">
+<option value="DEG">DEG 度数法</option>
+<option value="RAD">RAD 弧度法</option>
+</select>
+<button aria-pressed="false" class="secondary-button" id="themeToggle" type="button">🌙 ダークモード</button>
+</div>
+</header>
+<nav aria-label="電卓機能" class="tabs">
+<button class="tab-button active" data-tab="calculatorTab" type="button">電卓</button>
+<button class="tab-button" data-tab="workbenchTab" type="button">拡張計算・ワークシート</button>
+<button class="tab-button" data-tab="convertersTab" type="button">変換・割合</button>
+<button class="tab-button" data-tab="matrixTab" type="button">行列・複素数</button>
+<button class="tab-button" data-tab="analysisTab" type="button">方程式・統計</button>
+<button class="tab-button" data-tab="graphTab" type="button">関数グラフ</button>
+<button class="tab-button" data-tab="programmerTab" type="button">プログラマー</button>
+<button class="tab-button" data-tab="geometryTab" type="button">図形計算</button>
+<button class="tab-button" data-tab="mathTab" type="button">素数・和算</button>
+<button class="tab-button" data-tab="scienceTab" type="button">物理・化学・微積分</button>
+<button class="tab-button" data-tab="databaseTab" type="button">数式・知識DB</button>
+<button class="tab-button" data-tab="numericDatabaseTab" type="button">数値データベース</button>
+<button class="tab-button" data-tab="customTab" type="button">自作関数・テンプレート</button>
+<button class="tab-button" data-tab="quickToolsTab" type="button">クイックツール</button>
+<button class="tab-button" data-tab="labTab" type="button">実験・3D</button>
+<button class="tab-button" data-tab="dataLabTab" type="button">データ分析・可視化</button>
+
+
+
+
+
+<button class="tab-button" data-tab="guideTab" type="button">📖 使い方ガイド</button>
+<button class="tab-button" data-tab="settingsTab" type="button">⚙ 設定</button>
+</nav>
+<aside class="admax-sidebar" aria-label="広告">
+  <div class="admax-label">スポンサー広告</div>
+  <!-- admax -->
+  <script src="https://adm.shinobi.jp/s/04439fae1e568cb91f276282338258d0"></script>
+  <!-- admax -->
+</aside>
+<main class="main-content">
+<section aria-labelledby="calculatorHeading" class="tab-panel active" id="calculatorTab">
+<div class="two-column layout-calculator">
+<section class="panel calculator-panel">
+<div class="panel-heading">
+<div>
+<p class="eyebrow">SCIENTIFIC CALCULATOR</p>
+<h2 id="calculatorHeading">計算する</h2>
+</div>
+<span class="status-pill" id="memoryStatus">メモリー: 0</span>
+</div>
+<label class="field-label" for="expressionInput">計算式</label>
+<input aria-describedby="expressionHelp" autocomplete="off" class="expression-input" id="expressionInput" inputmode="text" placeholder="例：sqrt(81) + 2^3" spellcheck="false" type="text" value=""/>
+<div class="result-area">
+<span class="result-label">計算結果</span>
+<output aria-live="polite" id="mainResult">0</output>
+</div>
+<div aria-live="polite" class="number-formats" hidden="" id="bigNumberFormats"></div>
+<div aria-live="polite" class="calculation-explanation" id="mainExplanation"></div>
+<div aria-live="polite" class="pi-alternatives" hidden="" id="piAlternatives">
+<div><span class="result-label">&pi;を残した表記（厳密値）</span><strong id="piExactResult">&mdash;</strong><button class="small-button" id="copyPiExact" type="button">コピー</button></div>
+<div><span class="result-label">高精度の小数表記</span><strong id="piDecimalResult">&mdash;</strong><button class="small-button" id="copyPiDecimal" type="button">コピー</button></div>
+<div><span class="result-label">&pi; &asymp; 3.14 とした概算</span><strong id="piApproxResult">&mdash;</strong><button class="small-button" id="copyPiApprox" type="button">コピー</button></div>
+</div>
+<p class="help-text" id="expressionHelp">Enterで計算。使える記号：+ &minus; &times; &divide; ^ % ! ( )、虚数単位 i。例：sqrt(-1)、i^2、(2+3i)*(1-i)。関数は sqrt(9)、sin(30) のように入力。虚数 i はこの電卓欄だけで使えます。</p>
+<div class="keypad" id="keypad">
+<button class="key utility" data-insert="(" type="button">(</button>
+<button class="key utility" data-insert=")" type="button">)</button>
+<button class="key utility" data-insert="%" type="button">%</button>
+<button class="key utility" data-action="backspace" type="button">⌫</button>
+<button class="key danger" data-action="clear" type="button">AC</button>
+<button class="key" data-insert="7" type="button">7</button>
+<button class="key" data-insert="8" type="button">8</button>
+<button class="key" data-insert="9" type="button">9</button>
+<button class="key operator" data-insert="/" type="button">&divide;</button>
+<button class="key function-key" data-insert="sqrt(" type="button">&radic;</button>
+<button class="key" data-insert="4" type="button">4</button>
+<button class="key" data-insert="5" type="button">5</button>
+<button class="key" data-insert="6" type="button">6</button>
+<button class="key operator" data-insert="*" type="button">&times;</button>
+<button class="key function-key" data-insert="^2" type="button">x&sup2;</button>
+<button class="key" data-insert="1" type="button">1</button>
+<button class="key" data-insert="2" type="button">2</button>
+<button class="key" data-insert="3" type="button">3</button>
+<button class="key operator" data-insert="-" type="button">&minus;</button>
+<button class="key function-key" data-insert="^" type="button">xʸ</button>
+<button class="key zero-key" data-insert="0" type="button">0</button>
+<button class="key" data-insert="." type="button">.</button>
+<button class="key" data-action="sign" type="button">&plusmn;</button>
+<button class="key operator" data-insert="+" type="button">＋</button>
+<button class="key equals-key" data-action="equals" type="button">＝</button>
+</div>
+<div class="quick-functions">
+<button class="chip-button" data-insert="pi" type="button">&pi;</button>
+<button class="chip-button" data-insert="e" type="button">e</button>
+<button class="chip-button" data-insert="sin(" type="button">sin</button>
+<button class="chip-button" data-insert="cos(" type="button">cos</button>
+<button class="chip-button" data-insert="tan(" type="button">tan</button>
+<button class="chip-button" data-insert="log(" type="button">log</button>
+<button class="chip-button" data-insert="ln(" type="button">ln</button>
+<button class="chip-button" data-insert="!" type="button">n!</button>
+<button class="chip-button" data-insert="Ans" type="button">Ans</button>
+<button class="chip-button" data-insert="i" type="button">i（虚数）</button>
+</div>
+<div aria-label="計算メモリー" class="memory-row">
+<button class="small-button" id="memoryClear" type="button">MC</button>
+<button class="small-button" id="memoryRecall" type="button">MR</button>
+<button class="small-button" id="memoryAdd" type="button">M+</button>
+<button class="small-button" id="memorySubtract" type="button">M&minus;</button>
+<button class="small-button" id="memoryStore" type="button">MS</button>
+</div>
+<div class="message" id="calculatorMessage" role="status"></div>
+</section>
+<aside class="panel history-panel">
+<div class="panel-heading">
+<div>
+<p class="eyebrow">RECENT CALCULATIONS</p>
+<h2>計算履歴</h2>
+</div>
+<button class="text-button" id="clearHistory" type="button">履歴を消去</button>
+</div>
+<p class="help-text">履歴を選ぶと式を再利用できるよ。履歴はこのブラウザーに保存されます。</p>
+<div class="history-filter-row">
+<input aria-label="履歴を検索" id="historySearch" placeholder="履歴を検索&hellip;" type="search"/>
+<select aria-label="履歴の絞り込み" id="historyFilter"><option value="all">すべて</option><option value="favorite">お気に入り</option></select>
+</div>
+<div aria-live="polite" class="history-list" id="historyList">
+<p class="empty-state">まだ計算履歴はありません。</p>
+</div>
+<div class="button-stack">
+<button class="primary-button" id="exportBackup" type="button">バックアップを保存（JSON）</button>
+<button class="secondary-button full-width" id="importBackupButton" type="button">バックアップを復元</button>
+<input accept="application/json,.json" hidden="" id="importBackupFile" type="file"/>
+<button class="secondary-button full-width" id="exportCsv" type="button">履歴をCSVで出力</button>
+</div>
+<p class="help-text" id="backupMessage" role="status"></p>
+</aside>
+</div>
+</section>
+<section aria-labelledby="convertersHeading" class="tab-panel" id="convertersTab">
+<div class="section-intro">
+<p class="eyebrow">CONVERT &amp; CALCULATE</p>
+<h2 id="convertersHeading">変換・割合計算</h2>
+<p>数字を入力して、変換したい方法を選んでね。</p>
+</div>
+<div class="three-column">
+<section class="panel tool-panel">
+<h3>進数変換</h3>
+<p class="help-text">整数を2進数・8進数・10進数・16進数に変換します。</p>
+<label class="field-label" for="baseInput">数値</label>
+<input id="baseInput" inputmode="text" type="text" value="255"/>
+<label class="field-label" for="baseFrom">入力の進数</label>
+<select id="baseFrom"><option value="10">10進数</option><option value="2">2進数</option><option value="8">8進数</option><option value="16">16進数</option></select>
+<button class="primary-button full-width" id="convertBase" type="button">変換する</button>
+<div aria-live="polite" class="result-card" id="baseResults">変換結果がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>税込・割引・割合</h3>
+<label class="field-label" for="priceInput">元の金額・数値</label>
+<input id="priceInput" step="any" type="number" value="1000"/>
+<label class="field-label" for="percentInput">税率・割合（%）</label>
+<input id="percentInput" min="0" step="any" type="number" value="10"/>
+<div class="button-grid two-buttons">
+<button class="primary-button" id="calcTax" type="button">税込金額</button>
+<button class="secondary-button" id="calcDiscount" type="button">割引後</button>
+<button class="secondary-button" id="calcPercentOf" type="button">割合分の値</button>
+<button class="secondary-button" id="calcPercentReverse" type="button">何%か計算</button>
+</div>
+<label class="field-label" for="percentBaseInput">「何%か計算」の比較対象</label>
+<input id="percentBaseInput" step="any" type="number" value="2000"/>
+<div aria-live="polite" class="result-card" id="percentResults">計算結果がここに表示されます。</div>
+</section>
+<section class="panel tool-panel unit-converter-panel">
+<div class="panel-heading"><div><p class="eyebrow">UNIT CONVERSION LAB</p><h3>総合単位変換システム</h3></div><span class="unit-count" id="unitCountBadge">多数の単位</span></div>
+<p class="help-text">家庭・科学・工学・天文学・伝統単位から専門尺度まで。基準値・換算式・条件も確認できます。</p>
+<label class="field-label" for="unitCategorySearch">分野・カテゴリを検索</label><input id="unitCategorySearch" placeholder="例：天文、圧力、料理、音響、航空" type="search"/>
+<label class="field-label" for="unitCategory">分野・カテゴリ</label><select id="unitCategory"></select>
+<p class="unit-base-note"><span id="unitBaseLabel">基準単位</span>　<span id="unitCategoryNote"></span></p>
+<label class="field-label" for="unitValue">変換する値</label><input id="unitValue" step="any" type="number" value="1"/><div class="database-controls"><div><label class="field-label" for="unitUncertainty">入力の不確かさ（&plusmn;・任意）</label><input id="unitUncertainty" min="0" placeholder="例：0.01" step="any" type="number"/></div><div><label class="field-label" for="unitPrecision">表示精度</label><select id="unitPrecision"><option value="6">有効数字6桁</option><option value="8">有効数字8桁</option><option value="10">有効数字10桁</option><option selected="" value="12">有効数字12桁</option><option value="15">有効数字15桁</option></select></div></div><div class="database-controls"><div><label class="field-label" for="unitMachTemp">Mach換算の気温（&deg;C）</label><input id="unitMachTemp" step="any" type="number" value="15"/></div><div><label class="field-label" for="unitFavoriteSelect">お気に入り変換</label><select id="unitFavoriteSelect"><option value="">お気に入り変換を選択</option></select></div></div><button class="secondary-button full-width" id="unitApplyFavorite" type="button">お気に入り設定を呼び出す</button>
+<label class="field-label" for="unitSearch">変換元・変換先の単位を検索</label><input id="unitSearch" placeholder="単位名・記号で絞り込み" type="search"/>
+<div class="two-inputs"><div><label class="field-label" for="unitFrom">変換元</label><select id="unitFrom"></select></div><div><label class="field-label" for="unitTo">変換先</label><select id="unitTo"></select></div></div>
+<div class="button-grid two-buttons"><button class="primary-button" id="convertUnit" type="button">単位を変換</button><button class="secondary-button" id="unitSwap" type="button">&rlarr; 入れ替え</button></div>
+<button class="secondary-button full-width" id="unitFavoriteToggle" type="button">&star; この変換をお気に入り</button>
+<div aria-live="polite" class="result-card" id="unitResults">変換結果がここに表示されます。</div>
+<details class="unit-details" open=""><summary>換算式・計算過程</summary><pre class="pre-result" id="unitFormula">変換すると計算過程が表示されます。</pre></details>
+<details class="unit-details"><summary>同じ値をカテゴリ内の全単位へ一括変換</summary><div class="unit-all-results" id="unitAllResults"></div></details>
+<details class="unit-details"><summary>独自単位を登録（線形換算カテゴリ）</summary><p class="help-text">現在のカテゴリの基準単位に対する倍率を入力します。例：1独自単位 = 2.5 m なら係数2.5。</p><div class="database-controls"><input id="unitCustomName" placeholder="単位名"/><input id="unitCustomSymbol" placeholder="記号"/><input id="unitCustomFactor" min="0" placeholder="基準単位への係数" step="any" type="number"/></div><button class="secondary-button" id="unitAddCustom" type="button">このカテゴリに追加</button></details>
+<details class="unit-details"><summary>単位付き式・次元解析</summary><p class="help-text">例：5 kg * 9.80665 m/s^2、3 N * 2 m。基本単位へ展開して係数と次元を確認します。</p><textarea id="unitDimensionalExpression" rows="2">5 kg * 9.80665 m/s^2</textarea><button class="secondary-button full-width" id="runUnitDimensionalExpression" type="button">単位式を解析</button><div aria-live="polite" class="result-card pre-result" id="unitDimensionalResults">解析結果がここに表示されます。</div></details>
+<details class="unit-details"><summary>SI接頭辞の自動選択</summary><p class="help-text">入力値に合わせて、ヨタ〜ヨクトの範囲から読みやすい接頭辞を選びます。</p><div class="two-inputs"><div><label class="field-label" for="unitPrefixValue">数値</label><input id="unitPrefixValue" step="any" type="number" value="0.000003"/></div><div><label class="field-label" for="unitPrefixBase">基準単位</label><select id="unitPrefixBase"><option>m</option><option>g</option><option>s</option><option>A</option><option>V</option><option>W</option><option>Pa</option><option>Hz</option><option>J</option><option>B</option><option>bit</option><option>L</option></select></div></div><button class="secondary-button full-width" id="unitPrefixConvert" type="button">最適な接頭辞を選ぶ</button><div aria-live="polite" class="result-card pre-result" id="unitPrefixResults"></div></details>
+<details class="unit-details"><summary>医学・化学：mg/dL &rlarr; mmol/L（モル質量を指定）</summary><p class="help-text">濃度と物質量濃度をつなぐには分子量・モル質量が必要です。入力する物質と単位を必ず確認してください。</p><div class="database-controls"><div><label class="field-label" for="unitMolarValue">濃度の値</label><input id="unitMolarValue" step="any" type="number" value="90"/></div><div><label class="field-label" for="unitMolarMass">モル質量（g/mol）</label><input id="unitMolarMass" placeholder="例：グルコース 180.156" step="any" type="number" value="180.156"/></div></div><div class="two-inputs"><div><label class="field-label" for="unitMolarDirection">変換方向</label><select id="unitMolarDirection"><option value="mgdlToMmol">mg/dL &rarr; mmol/L</option><option value="mmolToMgdl">mmol/L &rarr; mg/dL</option></select></div><div class="field-help">mg/dL &times; 10 &divide; g/mol = mmol/L</div></div><button class="secondary-button full-width" id="unitMolarConvert" type="button">濃度を変換</button><div aria-live="polite" class="result-card pre-result" id="unitMolarResults"></div></details>
+<details class="unit-details"><summary>地理・測量：十進角度 &rlarr; 度分秒（DMS）</summary><label class="field-label" for="unitDecimalDegrees">十進角度（&deg;）</label><input id="unitDecimalDegrees" step="any" type="number" value="35.681236"/><button class="secondary-button" id="unitDecimalToDms" type="button">十進角度からDMSへ</button><div class="database-controls"><div><label class="field-label" for="unitDmsDeg">度</label><input id="unitDmsDeg" step="1" type="number" value="35"/></div><div><label class="field-label" for="unitDmsMin">分</label><input id="unitDmsMin" step="1" type="number" value="40"/></div><div><label class="field-label" for="unitDmsSec">秒</label><input id="unitDmsSec" step="any" type="number" value="52.45"/></div></div><button class="secondary-button" id="unitDmsToDecimal" type="button">DMSから十進角度へ</button><div aria-live="polite" class="result-card pre-result" id="unitDmsResults"></div></details>
+<details class="unit-details"><summary>写真・色彩：CIE XYZ &rlarr; CIE L*a*b*（D65参考白色点）</summary><p class="help-text">標準的なD65/2&deg;白色点の参考値 Xn=95.047、Yn=100、Zn=108.883 を使用。測色条件やプロファイルで結果が変わります。</p><div class="database-controls"><div><label class="field-label" for="unitColorX">X</label><input id="unitColorX" step="any" type="number" value="41.24"/></div><div><label class="field-label" for="unitColorY">Y</label><input id="unitColorY" step="any" type="number" value="21.26"/></div><div><label class="field-label" for="unitColorZ">Z</label><input id="unitColorZ" step="any" type="number" value="1.93"/></div></div><button class="secondary-button" id="unitXyzToLab" type="button">XYZ &rarr; L*a*b*</button><div class="database-controls"><div><label class="field-label" for="unitColorL">L*</label><input id="unitColorL" step="any" type="number" value="53.23"/></div><div><label class="field-label" for="unitColorA">a*</label><input id="unitColorA" step="any" type="number" value="80.11"/></div><div><label class="field-label" for="unitColorB">b*</label><input id="unitColorB" step="any" type="number" value="67.22"/></div></div><button class="secondary-button" id="unitLabToXyz" type="button">L*a*b* &rarr; XYZ</button><div aria-live="polite" class="result-card pre-result" id="unitColorResults"></div><p class="help-text">CIE76色差：2色のL*a*b*値を入力して比較できます。</p><div class="database-controls"><div><label class="field-label" for="unitLabA_L">色A L*</label><input id="unitLabA_L" step="any" type="number" value="53.23"/></div><div><label class="field-label" for="unitLabA_a">色A a*</label><input id="unitLabA_a" step="any" type="number" value="80.11"/></div><div><label class="field-label" for="unitLabA_b">色A b*</label><input id="unitLabA_b" step="any" type="number" value="67.22"/></div></div><div class="database-controls"><div><label class="field-label" for="unitLabB_L">色B L*</label><input id="unitLabB_L" step="any" type="number" value="50"/></div><div><label class="field-label" for="unitLabB_a">色B a*</label><input id="unitLabB_a" step="any" type="number" value="0"/></div><div><label class="field-label" for="unitLabB_b">色B b*</label><input id="unitLabB_b" step="any" type="number" value="0"/></div></div><button class="secondary-button" id="unitDeltaE76" type="button">CIE76色差を計算</button><div aria-live="polite" class="result-card pre-result" id="unitDeltaEResults"></div></details>
+<details class="unit-details"><summary>変換履歴</summary><div class="unit-history" id="unitHistory">変換履歴はまだありません。</div><button class="secondary-button" id="unitHistoryClear" type="button">履歴を消去</button></details>
+<details class="unit-details"><summary>独自単位・履歴のデータ管理</summary><div class="button-grid two-buttons"><button class="secondary-button" id="unitExportJson" type="button">JSONを書き出す</button><button class="secondary-button" id="unitExportCsv" type="button">履歴CSVを書き出す</button><button class="secondary-button" id="unitImportButton" type="button">JSONを読み込む</button><input accept="application/json,.json" hidden="" id="unitImportJson" type="file"/></div></details>
+<details class="unit-details"><summary>直接換算できない特殊尺度・参考表</summary><p class="help-text">靴・衣服サイズはメーカーや地域で寸法基準が違います。pHは活量、ppmは比率の定義、Machは気温・気圧、硬度は材料、地震規模は尺度の種類に依存します。色空間（XYZ/Lab/&Delta;E）も複数座標と観測条件が必要です。これらは単純な倍率換算にせず、条件付き計算または参考データとして扱います。</p><div class="unit-reference-grid"><div><strong>靴サイズ（参考・目安）</strong><p>日本：足長cmを基準にする方式。EU・US・UKはメーカーの木型・余裕寸法で差があるため、固定換算式は設けません。製品メーカー表を優先してください。</p></div><div><strong>衣服サイズ</strong><p>XS / S / M / L / XLなどの記号は国・ブランド・性別・採寸箇所で異なります。胸囲・胴囲・腰囲など実寸（cm/in）を変換して比較してください。</p></div><div><strong>鉱物・材料硬度</strong><p>モース硬度は順序尺度です。ビッカース・ロックウェル・ブリネルは試験荷重・材料・試験法に依存し、万能な相互換算はできません。</p></div><div><strong>地震規模・震度</strong><p>Mw・ML・mb・Msは異なる測定尺度で、地震の規模・距離・周波数帯等に依存します。日本の震度も体感・揺れの強さの階級であり、マグニチュードとは換算できません。</p></div><div><strong>色彩・色差</strong><p>CIE XYZ・xyY・L*a*b*・L*C*h・&Delta;E76/94/2000は複数座標と白色点・観測条件を伴います。単一の倍率換算ではなく、色変換専用エンジンの対象です。</p></div><div><strong>ふるい・粒度（参考例）</strong><p>US ASTM E11系の代表開口例：No.4 &asymp;4.75mm、No.10 &asymp;2.00mm、No.20 &asymp;0.850mm、No.40 &asymp;0.425mm、No.100 &asymp;0.150mm、No.200 &asymp;0.075mm。規格版・公差を確認し、校正済みふるいの証明値を優先してください。</p></div><div><strong>モース硬度（序列尺度）</strong><p>1 滑石、2 石膏、3 方解石、4 蛍石、5 燐灰石、6 正長石、7 石英、8 トパーズ、9 コランダム、10 ダイヤモンド。等間隔の数値尺度ではありません。</p></div><div><strong>航空 Mach・FL</strong><p>Machは局所音速で割った速度比です。画面のMach換算は指定気温を使う理想気体の近似。FLは標準気圧面の高度表現で、地上高度ではありません。</p></div><div><strong>医学・化学濃度</strong><p>mg/dLとmmol/Lの換算には物質のモル質量が必要。ppm・ppbも質量比・体積比・モル比を区別してください。pHから濃度への変換は活量係数を1とした近似です。</p></div></div></details>
+</section>
+</div>
+</section>
+<section aria-labelledby="matrixHeading" class="tab-panel" id="matrixTab">
+<div class="section-intro">
+<p class="eyebrow">ADVANCED MATH</p>
+<h2 id="matrixHeading">行列・複素数計算</h2>
+<p>行列は1行ずつ入力し、数字はカンマで区切ってね。例：1, 2（改行）3, 4</p>
+</div>
+<div class="two-column">
+<section class="panel tool-panel">
+<h3>行列計算</h3>
+<div class="two-inputs matrix-inputs">
+<div><label class="field-label" for="matrixA">行列 A</label><textarea id="matrixA" rows="4" spellcheck="false">1, 2
+3, 4</textarea></div>
+<div><label class="field-label" for="matrixB">行列 B</label><textarea id="matrixB" rows="4" spellcheck="false">5, 6
+7, 8</textarea></div>
+</div>
+<label class="field-label" for="matrixOperation">演算</label>
+<select id="matrixOperation">
+<option value="add">A + B</option><option value="subtract">A &minus; B</option><option value="multiply">A &times; B</option>
+<option value="transpose">A の転置</option><option value="determinantA">A の行列式</option><option value="determinantB">B の行列式</option>
+<option value="inverseA">A の逆行列</option><option value="inverseB">B の逆行列</option>
+<option value="rankA">A の階数（ランク）</option><option value="rankB">B の階数（ランク）</option>
+<option value="traceA">A のトレース</option><option value="traceB">B のトレース</option>
+<option value="eigenA">A の固有値（2&times;2）</option><option value="solveAxB">A &times; X = B を解く</option>
+</select>
+<button class="primary-button full-width" id="calculateMatrix" type="button">行列を計算</button>
+<pre aria-live="polite" class="result-card pre-result" id="matrixResults">結果がここに表示されます。</pre>
+</section>
+<section class="panel tool-panel">
+<h3>複素数計算</h3>
+<p class="help-text">複素数は a + bi の形で入力します。偏角は角度モード（DEG/RAD）に従います。</p>
+<div class="complex-grid">
+<div class="subheading">複素数 A</div><div class="subheading">複素数 B</div>
+<div><label class="field-label" for="complexAr">実部 a</label><input id="complexAr" step="any" type="number" value="3"/></div>
+<div><label class="field-label" for="complexBr">実部 c</label><input id="complexBr" step="any" type="number" value="1"/></div>
+<div><label class="field-label" for="complexAi">虚部 b</label><input id="complexAi" step="any" type="number" value="2"/></div>
+<div><label class="field-label" for="complexBi">虚部 d</label><input id="complexBi" step="any" type="number" value="-4"/></div>
+</div>
+<label class="field-label" for="complexOperation">演算</label>
+<select id="complexOperation">
+<option value="add">A + B</option><option value="subtract">A &minus; B</option><option value="multiply">A &times; B</option><option value="divide">A &divide; B</option>
+<option value="absA">|A|（絶対値）</option><option value="absB">|B|（絶対値）</option>
+<option value="conjA">Aの共役</option><option value="conjB">Bの共役</option><option value="argA">Aの偏角</option><option value="argB">Bの偏角</option>
+<option value="polarA">Aの極形式</option><option value="polarB">Bの極形式</option>
+<option value="squareA">Aの2乗</option><option value="squareB">Bの2乗</option>
+</select>
+<button class="primary-button full-width" id="calculateComplex" type="button">複素数を計算</button>
+<div aria-live="polite" class="result-card" id="complexResults">結果がここに表示されます。</div>
+</section>
+</div>
+</section>
+<section aria-labelledby="analysisHeading" class="tab-panel" id="analysisTab">
+<div class="section-intro">
+<p class="eyebrow">SOLVE &amp; ANALYZE</p>
+<h2 id="analysisHeading">方程式・統計計算</h2>
+<p>一次方程式・二次方程式の解や、数値データの基本統計を計算できます。</p>
+</div>
+<div class="two-column">
+<section class="panel tool-panel">
+<h3>方程式を解く</h3>
+<label class="field-label" for="equationType">方程式の種類</label>
+<select id="equationType"><option value="linear">一次方程式：ax + b = 0</option><option value="quadratic">二次方程式：ax&sup2; + bx + c = 0</option><option value="cubic">三次方程式：ax&sup3; + bx&sup2; + cx + d = 0</option></select>
+<div class="three-inputs">
+<div><label class="field-label" for="coefA">係数 a</label><input id="coefA" step="any" type="number" value="1"/></div>
+<div><label class="field-label" for="coefB">係数 b</label><input id="coefB" step="any" type="number" value="-5"/></div>
+<div id="coefCGroup"><label class="field-label" for="coefC">係数 c</label><input id="coefC" step="any" type="number" value="6"/></div>
+<div hidden="" id="coefDGroup"><label class="field-label" for="coefD">係数 d</label><input id="coefD" step="any" type="number" value="-6"/></div>
+</div>
+<button class="primary-button full-width" id="solveEquation" type="button">方程式を解く</button>
+<div aria-live="polite" class="result-card" id="equationResults">解がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>統計計算</h3>
+<label class="field-label" for="statsInput">数値データ（カンマ・空白・改行で区切る）</label>
+<textarea id="statsInput" rows="5" spellcheck="false">12, 15, 18, 18, 22, 25</textarea>
+<button class="primary-button full-width" id="calculateStats" type="button">統計を計算</button>
+<div aria-live="polite" class="result-card stats-results" id="statsResults">統計結果がここに表示されます。</div>
+<p class="help-text">標準偏差は、全データを対象とする母標準偏差と、標本標準偏差を表示します。拡張統計では四分位数も追加します。</p>
+<h3 class="sub-tool-heading">相関・回帰分析</h3>
+<p class="help-text">XとYに同じ個数の数値を入力してください。順番に対応したデータとして分析します。</p>
+<label class="field-label" for="pairedXInput">Xデータ</label>
+<textarea id="pairedXInput" rows="2" spellcheck="false">1, 2, 3, 4, 5</textarea>
+<label class="field-label" for="pairedYInput">Yデータ</label>
+<textarea id="pairedYInput" rows="2" spellcheck="false">2, 4, 5, 4, 6</textarea>
+<button class="secondary-button full-width" id="calculateCorrelation" type="button">相関・回帰を計算</button>
+<div aria-live="polite" class="result-card" id="correlationResults">相関係数と回帰直線を表示します。</div>
+<canvas aria-label="統計データのヒストグラム" class="stats-canvas" height="300" id="statsCanvas" width="640"></canvas>
+</section>
+</div>
+<section class="panel tool-panel advanced-equations-panel">
+<h3>追加：連立方程式・数値微分・数値積分</h3>
+<div class="two-column">
+<div>
+<h4>2元連立一次方程式</h4>
+<p class="help-text">例のように、左辺=右辺を1行ずつ入力します。xとyを使えます。</p>
+<textarea id="systemEquations" rows="3" spellcheck="false">2*x+y=7
+x-y=2</textarea>
+<button class="primary-button full-width" id="solveSystem" type="button">連立方程式を解く</button>
+<div aria-live="polite" class="result-card pre-result" id="systemResults">解がここに表示されます。</div>
+</div>
+<div>
+<h4>数値微分・数値積分</h4>
+<label class="field-label" for="calculusExpression">関数 f(x)</label>
+<input id="calculusExpression" spellcheck="false" type="text" value="x^3 - 3*x"/>
+<label class="field-label" for="calculusPoint">微分する位置 x₀</label>
+<input id="calculusPoint" step="any" type="number" value="2"/>
+<div class="two-inputs">
+<div><label class="field-label" for="calculusLower">積分下限</label><input id="calculusLower" step="any" type="number" value="0"/></div>
+<div><label class="field-label" for="calculusUpper">積分上限</label><input id="calculusUpper" step="any" type="number" value="2"/></div>
+</div>
+<button class="primary-button full-width" id="calculateCalculus" type="button">微分・積分を計算</button>
+<div aria-live="polite" class="result-card pre-result" id="calculusResults">結果がここに表示されます。</div>
+</div>
+</div>
+<p class="help-text">この欄は中央差分による数値微分と、シンプソン法による数値積分です。記号的に式を変形する計算ではありません。</p>
+</section>
+</section>
+<section aria-labelledby="programmerHeading" class="tab-panel" id="programmerTab">
+<div class="section-intro"><p class="eyebrow">PROGRAMMER TOOLS</p><h2 id="programmerHeading">プログラマー向け計算</h2><p>整数の進数変換、ビット演算、符号付き・符号なし表現をまとめて扱います。</p></div>
+<div class="two-column">
+<section class="panel tool-panel">
+<h3>ビット演算</h3>
+<label class="field-label" for="programmerA">値 A</label><input id="programmerA" spellcheck="false" type="text" value="1010"/>
+<label class="field-label" for="programmerBaseA">Aの進数</label><select id="programmerBaseA"><option value="2">2進数</option><option value="8">8進数</option><option selected="" value="10">10進数</option><option value="16">16進数</option></select>
+<label class="field-label" for="programmerB">値 B</label><input id="programmerB" spellcheck="false" type="text" value="1100"/>
+<label class="field-label" for="programmerBaseB">Bの進数</label><select id="programmerBaseB"><option selected="" value="2">2進数</option><option value="8">8進数</option><option value="10">10進数</option><option value="16">16進数</option></select>
+<label class="field-label" for="programmerOperation">演算</label><select id="programmerOperation"><option value="and">AND</option><option value="or">OR</option><option value="xor">XOR</option><option value="notA">NOT A</option><option value="left">Aを左シフト</option><option value="right">Aを右シフト</option></select>
+<label class="field-label" for="programmerBits">ビット幅</label><select id="programmerBits"><option>8</option><option>16</option><option selected="">32</option><option>64</option></select>
+<button class="primary-button full-width" id="calculateBits" type="button">ビット演算する</button>
+<div aria-live="polite" class="result-card pre-result" id="programmerResults">結果がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>進数・文字コード</h3>
+<p class="help-text">整数を入力し、各進数とUTF-16コード単位を確認できます。</p>
+<label class="field-label" for="programmerNumber">整数</label><input id="programmerNumber" type="text" value="255"/>
+<label class="field-label" for="programmerNumberBase">入力の進数</label><select id="programmerNumberBase"><option value="2">2進数</option><option value="8">8進数</option><option selected="" value="10">10進数</option><option value="16">16進数</option></select>
+<button class="primary-button full-width" id="convertProgrammerNumber" type="button">進数を変換</button>
+<div aria-live="polite" class="result-card pre-result" id="programmerConvertResults">変換結果がここに表示されます。</div>
+<label class="field-label" for="characterInput">文字</label><input id="characterInput" maxlength="2" type="text" value="A"/>
+<button class="secondary-button full-width" id="convertCharacter" type="button">文字コードを確認</button>
+<div aria-live="polite" class="result-card" id="characterResults">文字コードがここに表示されます。</div>
+</section>
+</div>
+</section>
+<section aria-labelledby="geometryHeading" class="tab-panel" id="geometryTab">
+<div class="section-intro"><p class="eyebrow">GEOMETRY CALCULATOR</p><h2 id="geometryHeading">図形計算</h2><p>平面図形と立体の面積・周囲の長さ・体積を計算します。</p></div>
+<div class="two-column">
+<section class="panel tool-panel">
+<h3>図形を選択</h3>
+<label class="field-label" for="geometryShape">図形</label><select id="geometryShape">
+<option value="circle">円</option><option value="triangle">三角形（3辺）</option><option value="rectangle">長方形</option><option value="square">正方形</option><option value="sphere">球</option><option value="cube">立方体</option><option value="cylinder">円柱</option><option value="cone">円錐</option>
+</select>
+<div class="two-inputs">
+<div><label class="field-label" for="geometryA" id="geometryLabelA">半径</label><input id="geometryA" min="0" step="any" type="number" value="2"/></div>
+<div><label class="field-label" for="geometryB" id="geometryLabelB">高さ（任意）</label><input id="geometryB" min="0" step="any" type="number" value="3"/></div>
+</div>
+<div><label class="field-label" for="geometryC" id="geometryLabelC">3辺目（任意）</label><input id="geometryC" min="0" step="any" type="number" value="4"/></div>
+<button class="primary-button full-width" id="calculateGeometry" type="button">図形を計算</button>
+<div aria-live="polite" class="result-card pre-result" id="geometryResults">計算結果がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>対応する図形</h3>
+<div class="geometry-help-list"><p><b>円：</b>半径を入力。</p><p><b>三角形：</b>3辺の長さを入力。三角不等式を確認します。</p><p><b>長方形：</b>縦・横を入力。</p><p><b>球・立方体：</b>半径または辺の長さを入力。</p><p><b>円柱・円錐：</b>底面の半径と高さを入力。</p></div>
+</section>
+</div>
+</section>
+<section aria-labelledby="graphHeading" class="tab-panel" id="graphTab">
+<div class="section-intro">
+<p class="eyebrow">FUNCTION PLOTTER</p>
+<h2 id="graphHeading">関数グラフ・プロ</h2>
+<p>複数の関数・垂直線を重ねて描画できます。ホイールで拡大・縮小、ドラッグで移動。横軸の x は &theta; と書いてもOK（&theta;はxと同じ変数）。虚数 i はグラフでは使いません。</p>
+</div>
+<section class="panel tool-panel graph-panel">
+<h3>1. 描画する関数</h3>
+<div class="graph-function-grid">
+<div class="graph-expression"><label class="field-label" for="graphExpression">f₁(x) または x=定数</label><input aria-label="1つ目の関数" id="graphExpression" spellcheck="false" type="text" value="x^2"/></div>
+<div class="graph-expression"><label class="field-label" for="graphExpression2">f₂(x)</label><input aria-label="2つ目の関数" id="graphExpression2" spellcheck="false" type="text" value="sin(x)"/></div>
+<div class="graph-expression"><label class="field-label" for="graphExpression3">f₃(x)</label><input aria-label="3つ目の関数" id="graphExpression3" spellcheck="false" type="text" value="0.5*x"/></div>
+<div class="graph-expression"><label class="field-label" for="graphExpression4">f₄(x)（任意）</label><input aria-label="4つ目の関数" id="graphExpression4" spellcheck="false" type="text" value=""/></div>
+<div><label class="field-label" for="graphMin">x最小値</label><input id="graphMin" step="any" type="number" value="-10"/></div>
+<div><label class="field-label" for="graphMax">x最大値</label><input id="graphMax" step="any" type="number" value="10"/></div>
+<div class="graph-draw-action"><button class="primary-button" id="plotGraph" type="button">グラフを描く</button></div>
+</div>
+<section class="panel-soft-block graph-special-tools">
+<h3>追加グラフモード</h3>
+<label class="field-label" for="graphSpecialMode">描画方法</label>
+<select id="graphSpecialMode"><option value="normal">通常の関数 y=f(x)</option><option value="polar">極座標 r=f(&theta;)</option><option value="parametric">媒介変数 x=f(t), y=g(t)</option><option value="inequality">不等式の領域表示</option></select>
+<div class="three-inputs" hidden="" id="polarControls">
+<div><label class="field-label" for="polarExpression">r(&theta;)</label><input id="polarExpression" spellcheck="false" value="2+cos(3*theta)"/></div>
+<div><label class="field-label" for="polarStart">&theta;開始（rad）</label><input id="polarStart" step="any" type="number" value="0"/></div>
+<div><label class="field-label" for="polarEnd">&theta;終了（rad）</label><input id="polarEnd" step="any" type="number" value="6.28318530718"/></div>
+</div>
+<div class="three-inputs" hidden="" id="parametricControls">
+<div><label class="field-label" for="parametricX">x(t)</label><input id="parametricX" spellcheck="false" value="cos(t)"/></div>
+<div><label class="field-label" for="parametricY">y(t)</label><input id="parametricY" spellcheck="false" value="sin(t)"/></div>
+<div><label class="field-label" for="parametricStart">t開始</label><input id="parametricStart" step="any" type="number" value="0"/></div>
+<div><label class="field-label" for="parametricEnd">t終了</label><input id="parametricEnd" step="any" type="number" value="6.28318530718"/></div>
+</div>
+<div hidden="" id="inequalityControls">
+<label class="field-label" for="inequalityExpression">不等式（x・yを使用）</label><input id="inequalityExpression" spellcheck="false" value="x^2+y^2&lt;=9"/>
+<p class="help-text">例：y&gt;x^2、x^2+y^2&lt;=9、y&gt;=0。領域は簡易サンプリングで塗り分けます。</p>
+</div>
+<button class="primary-button full-width" id="drawSpecialGraph" type="button">追加グラフを描く</button>
+</section>
+<div aria-label="グラフ操作" class="graph-toolbar">
+<button class="secondary-button" id="graphZoomIn" type="button">＋ 拡大</button>
+<button class="secondary-button" id="graphZoomOut" type="button">&minus; 縮小</button>
+<button class="secondary-button" id="graphResetView" type="button">表示範囲をリセット</button>
+<button class="primary-button" id="graphSavePng" type="button">PNGで保存</button>
+</div>
+<div class="graph-parameter panel-soft-block">
+<div class="graph-parameter-heading"><label for="graphParam">動くパラメーター <code>a</code></label><output id="graphParamValue">a = 1.0</output></div>
+<p class="help-text">関数式に <code>a</code> を含めると、スライダーで形が変わります。例：<code>a*x</code>、<code>x^2-a</code>。</p>
+<div class="graph-parameter-controls"><input id="graphParam" max="5" min="-5" step="0.1" type="range" value="1"/><div class="animation-actions"><label class="field-label" for="graphAnimationSpeed">速度</label><select id="graphAnimationSpeed"><option value="240">ゆっくり</option><option selected="" value="75">標準</option><option value="30">速い</option></select><button class="secondary-button" id="graphAnimate" type="button">▶ アニメーション開始</button></div></div>
+</div>
+<div aria-label="地形モデルのサンプル" class="graph-toolbar">
+<button class="secondary-button" id="loadFujiProfile" type="button">富士山の断面モデル</button>
+<button class="secondary-button" id="loadTamaProfile" type="button">多摩川の縦断モデル</button>
+</div>
+<p class="help-text">※富士山・多摩川は形を確認するための模式モデルです。測量点を使った実測地形データではありません。</p>
+<div aria-label="関数の凡例" class="graph-legend" id="graphLegend"></div>
+<p class="help-text" id="graphMessage" role="status">グラフの上にマウスを置くと座標と関数値を確認できます。スマートフォンではタッチして確認できます。</p>
+<p aria-live="polite" class="graph-probe" id="graphProbe">座標：グラフ上にポインターを移動してください。</p>
+<div class="canvas-wrap graph-canvas-wrap"><canvas aria-label="複数の関数グラフ。ドラッグで移動、ホイールで拡大・縮小できます。" height="560" id="graphCanvas" tabindex="0" width="1000"></canvas></div>
+<p class="help-text">操作：ホイール＝拡大・縮小、ドラッグ＝表示範囲の移動、PNGで保存＝現在のグラフ画像を保存。三角関数の角度単位はヘッダーのDEG/RAD設定に従います。</p>
+</section>
+<section class="panel tool-panel surface-panel">
+<h3>5. 3D関数グラフ</h3>
+<p class="help-text">z=f(x,y) の右辺の式を入力します（z=は入力しません）。ドラッグで回転できます。</p>
+<div class="graph-function-grid surface-controls">
+<div class="graph-expression"><label class="field-label" for="surfaceExpression">f(x,y)（右辺のみ）</label><input id="surfaceExpression" spellcheck="false" type="text" value="sin(sqrt(x^2+y^2))"/></div>
+<div><label class="field-label" for="surfaceRange">x・yの範囲</label><input id="surfaceRange" max="12" min="2" step="1" type="number" value="5"/></div>
+<div><label class="field-label" for="surfaceQuality">描画品質</label><select id="surfaceQuality"><option value="12">低</option><option selected="" value="20">標準</option><option value="28">高</option></select></div>
+<div class="graph-draw-action"><button class="primary-button" id="drawSurface" type="button">3Dを描く</button></div>
+</div>
+<div class="graph-toolbar"><button class="secondary-button" id="surfaceReset" type="button">視点をリセット</button><button class="secondary-button" id="surfaceSave" type="button">画像を保存</button></div>
+<div class="canvas-wrap surface-canvas-wrap"><canvas aria-label="3次元関数曲面" height="560" id="surfaceCanvas" width="960"></canvas></div>
+<p class="help-text" id="surfaceMessage" role="status">例：x^2+y^2、sin(x)*cos(y)、sqrt(x^2+y^2)</p>
+</section>
+<div class="graph-analysis-grid">
+<section class="panel tool-panel">
+<h3>2. 2つのグラフの交点</h3>
+<p class="help-text">関数の差が0になる場所を数値的に探します。現在のx表示範囲内で符号が変わる交点が対象です。</p>
+<div class="two-inputs">
+<div><label class="field-label" for="intersectionFunctionA">1つ目</label><select id="intersectionFunctionA"><option value="1">f₁(x)</option><option value="2">f₂(x)</option><option value="3">f₃(x)</option><option value="4">f₄(x)</option></select></div>
+<div><label class="field-label" for="intersectionFunctionB">2つ目</label><select id="intersectionFunctionB"><option value="2">f₂(x)</option><option value="1">f₁(x)</option><option value="3">f₃(x)</option><option value="4">f₄(x)</option></select></div>
+</div>
+<button class="primary-button full-width" id="findIntersections" type="button">交点を求める</button>
+<div aria-live="polite" class="result-card pre-result" id="intersectionResults">交点がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>3. 接線・微分係数</h3>
+<p class="help-text">指定したxの位置で数値微分を行い、接線 y = f(x₀) + f&prime;(x₀)(x &minus; x₀) を描きます。</p>
+<label class="field-label" for="tangentFunction">対象の関数</label><select id="tangentFunction"><option value="1">f₁(x)</option><option value="2">f₂(x)</option><option value="3">f₃(x)</option><option value="4">f₄(x)</option></select>
+<label class="field-label" for="tangentX">接点のx座標 x₀</label><input id="tangentX" step="any" type="number" value="1"/>
+<button class="primary-button full-width" id="drawTangent" type="button">接線を表示</button>
+<div aria-live="polite" class="result-card pre-result" id="tangentResults">接線の情報がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>4. 定積分・面積</h3>
+<p class="help-text">指定区間の定積分を数値積分で近似し、グラフにy=0との間の符号付き面積を塗ります。</p>
+<label class="field-label" for="integralFunction">対象の関数</label><select id="integralFunction"><option value="1">f₁(x)</option><option value="2">f₂(x)</option><option value="3">f₃(x)</option><option value="4">f₄(x)</option></select>
+<div class="two-inputs"><div><label class="field-label" for="integralLower">下限</label><input id="integralLower" step="any" type="number" value="0"/></div><div><label class="field-label" for="integralUpper">上限</label><input id="integralUpper" step="any" type="number" value="2"/></div></div>
+<button class="primary-button full-width" id="calculateIntegral" type="button">積分と面積を表示</button>
+<div aria-live="polite" class="result-card pre-result" id="integralResults">積分の結果がここに表示されます。</div>
+</section>
+</div>
+<div class="graph-analysis-grid">
+<section class="panel tool-panel">
+<h3>6. 極限の数値確認</h3>
+<p class="help-text">xが指定値に近づくときの左側・右側の値を計算します。数学的な証明ではなく数値近似です。</p>
+<label class="field-label" for="limitExpression">関数 f(x)</label><input id="limitExpression" spellcheck="false" value="(x^2-1)/(x-1)"/>
+<label class="field-label" for="limitPoint">近づく値 a</label><input id="limitPoint" step="any" type="number" value="1"/>
+<button class="primary-button full-width" id="calculateLimit" type="button">左右の極限を調べる</button>
+<div aria-live="polite" class="result-card pre-result" id="limitResults">結果がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>7. 数列の収束チェック</h3>
+<p class="help-text">式の x を n として数列 aₙ を計算します。最後の項が安定しているかを調べる簡易チェックです。</p>
+<label class="field-label" for="sequenceExpression">aₙ の式（x=n）</label><input id="sequenceExpression" spellcheck="false" value="(1+1/x)^x"/>
+<button class="primary-button full-width" id="checkSequence" type="button">数列を調べる</button>
+<div aria-live="polite" class="result-card pre-result" id="sequenceResults">結果がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>8. 漸化式の反復計算</h3>
+<p class="help-text">aₙ₊₁ = f(aₙ) の形で、現在の値を次の x に入れて繰り返します。数値実験です。</p>
+<label class="field-label" for="recurrenceExpression">次の項の式 f(x)</label><input id="recurrenceExpression" spellcheck="false" value="(x+2/x)/2"/>
+<label class="field-label" for="recurrenceInitial">初項 a₀</label><input id="recurrenceInitial" step="any" type="number" value="2"/>
+<label class="field-label" for="recurrenceCount">反復回数（最大100）</label><input id="recurrenceCount" max="100" min="1" type="number" value="12"/>
+<button class="primary-button full-width" id="runRecurrence" type="button">漸化式を反復する</button>
+<div aria-live="polite" class="result-card pre-result" id="recurrenceResults">計算結果がここに表示されます。</div>
+</section>
+</div>
+</section>
+<section aria-labelledby="mathHeading" class="tab-panel" id="mathTab">
+<div class="section-intro"><p class="eyebrow">NUMBER THEORY / WASAN</p><h2 id="mathHeading">素数・和算・文章題</h2><p>素数の一覧、昔ながらの文章題、円の多角形近似を計算できます。</p></div>
+<div class="two-column">
+<section class="panel tool-panel">
+<h3>素数表を作る</h3>
+<p class="help-text">指定した上限までの素数をエラトステネスのふるいで求めます。上限は10,000まで。</p>
+<label class="field-label" for="primeLimit">上限</label><input id="primeLimit" max="10000" min="2" type="number" value="200"/>
+<button class="primary-button full-width" id="generatePrimes" type="button">素数一覧を作成</button>
+<div aria-live="polite" class="result-card pre-result" id="primeResults">2, 3, 5, 7, 11, 13, &hellip;</div>
+</section>
+<section class="panel tool-panel">
+<h3>鶴亀算</h3>
+<p class="help-text">鶴（足2本）と亀（足4本）の合計数・足の合計から、それぞれの数を求めます。</p>
+<label class="field-label" for="wasanHeads">合計の数</label><input id="wasanHeads" min="0" type="number" value="10"/>
+<label class="field-label" for="wasanLegs">足の合計</label><input id="wasanLegs" min="0" type="number" value="28"/>
+<button class="primary-button full-width" id="solveWasan" type="button">鶴亀算を解く</button>
+<div aria-live="polite" class="result-card pre-result" id="wasanResults">答えがここに表示されます。</div>
+</section>
+</div>
+<div class="two-column">
+<section class="panel tool-panel"><h3>素因数分解</h3><p class="help-text">整数を素数の積に分解します。対象は絶対値2〜1兆まで。</p><label class="field-label" for="factorInput">整数</label><input id="factorInput" max="1000000000000" min="2" step="1" type="number" value="360"/><button class="primary-button full-width" id="factorizeNumber" type="button">素因数分解</button><div aria-live="polite" class="result-card pre-result" id="factorResults">360 = 2&sup3; &times; 3&sup2; &times; 5</div></section>
+<section class="panel tool-panel">
+<h3>円周率の多角形近似</h3>
+<p class="help-text">正多角形を円に内接・外接させ、円周率 &pi; の下側・上側の近似を確認します。辺数は6〜4096。</p>
+<label class="field-label" for="polygonSides">辺の数</label><input id="polygonSides" max="4096" min="6" step="1" type="number" value="96"/>
+<button class="primary-button full-width" id="approximatePi" type="button">&pi;を近似する</button>
+<div aria-live="polite" class="result-card pre-result" id="piApproxResults">近似値がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>和算・文章題のメモ</h3>
+<p>鶴亀算のように、条件を式に置き換えて答えを求める考え方を練習できます。円周率の近似は、円を多角形で挟み込む古典的な幾何学の考え方です。</p>
+<div class="guide-example"><strong>鶴亀算の考え方</strong><pre>鶴 + 亀 = 頭の合計
+2&times;鶴 + 4&times;亀 = 足の合計</pre><strong>例：10頭、28本</strong><pre>鶴 6羽、亀 4匹</pre></div>
+</section>
+</div>
+</section>
+<section aria-labelledby="scienceHeading" class="tab-panel" id="scienceTab">
+<div class="section-intro"><p class="eyebrow">SCIENCE / ENGINEERING</p><h2 id="scienceHeading">物理・工学・化学・微積分</h2><p>基本法則を使った計算ツール集。単位は入力欄に表示されたものを使ってね。</p></div>
+<div class="three-column">
+<section class="panel tool-panel"><h3>オームの法則・電力</h3><p class="help-text">電圧 V・電流 A・抵抗 &Omega; のうち2つを入力して「計算」。3つすべて入力しても整合性の確認に使えます。</p>
+<label class="field-label" for="ohmVoltage">電圧 V（空欄可）</label><input id="ohmVoltage" placeholder="例：12" step="any" type="number"/>
+<label class="field-label" for="ohmCurrent">電流 A（空欄可）</label><input id="ohmCurrent" placeholder="例：2" step="any" type="number"/>
+<label class="field-label" for="ohmResistance">抵抗 &Omega;（空欄可）</label><input id="ohmResistance" placeholder="例：6" step="any" type="number"/>
+<button class="primary-button full-width" id="calculateOhm" type="button">計算する</button><div aria-live="polite" class="result-card pre-result" id="ohmResults">V = IR、P = VI</div></section>
+<section class="panel tool-panel"><h3>力学計算</h3><p class="help-text">質量 m・加速度 a・速度 v・高さ h を入力して、力・運動量・運動エネルギー・位置エネルギーを求めます。</p>
+<label class="field-label" for="mechanicsMass">質量 m（kg）</label><input id="mechanicsMass" step="any" type="number" value="2"/>
+<label class="field-label" for="mechanicsAcceleration">加速度 a（m/s&sup2;）</label><input id="mechanicsAcceleration" step="any" type="number" value="3"/>
+<label class="field-label" for="mechanicsVelocity">速度 v（m/s）</label><input id="mechanicsVelocity" step="any" type="number" value="5"/>
+<label class="field-label" for="mechanicsHeight">高さ h（m）</label><input id="mechanicsHeight" step="any" type="number" value="10"/>
+<button class="primary-button full-width" id="calculateMechanics" type="button">物理量を計算</button><div aria-live="polite" class="result-card pre-result" id="mechanicsResults">F=ma / p=mv / Ek=&frac12;mv&sup2; / Ep=mgh</div></section>
+<section class="panel tool-panel"><h3>熱量計算</h3><p class="help-text">Q = mc&Delta;T。比熱は J/(kg・K)、温度差は K または ℃差で入力。</p>
+<label class="field-label" for="heatMass">質量 m（kg）</label><input id="heatMass" step="any" type="number" value="1"/>
+<label class="field-label" for="heatSpecific">比熱 c（J/(kg・K)）</label><input id="heatSpecific" step="any" type="number" value="4186"/>
+<label class="field-label" for="heatDelta">温度変化 &Delta;T（K）</label><input id="heatDelta" step="any" type="number" value="10"/>
+<button class="primary-button full-width" id="calculateHeat" type="button">熱量を計算</button><div aria-live="polite" class="result-card" id="heatResults">結果がここに表示されます。</div></section>
+</div>
+<div class="three-column">
+<section class="panel tool-panel"><h3>モル計算</h3><p class="help-text">n = m / M。質量gとモル質量g/molを入力。</p>
+<label class="field-label" for="moleMass">物質の質量（g）</label><input id="moleMass" step="any" type="number" value="18"/>
+<label class="field-label" for="moleMolarMass">モル質量（g/mol）</label><input id="moleMolarMass" step="any" type="number" value="18"/>
+<button class="primary-button full-width" id="calculateMoles" type="button">物質量を計算</button><div aria-live="polite" class="result-card" id="moleResults">物質量 n（mol）</div></section>
+<section class="panel tool-panel"><h3>モル濃度</h3><p class="help-text">c = n / V。物質量 mol、体積 L。</p>
+<label class="field-label" for="concentrationMoles">物質量（mol）</label><input id="concentrationMoles" step="any" type="number" value="0.5"/>
+<label class="field-label" for="concentrationVolume">溶液体積（L）</label><input id="concentrationVolume" step="any" type="number" value="1"/>
+<button class="primary-button full-width" id="calculateConcentration" type="button">モル濃度を計算</button><div aria-live="polite" class="result-card" id="concentrationResults">濃度（mol/L）</div></section>
+<section class="panel tool-panel"><h3>pH計算</h3><p class="help-text">pH = &minus;log₁₀[H⁺]。水素イオン濃度 mol/L を入力。</p>
+<label class="field-label" for="hydrogenConcentration">[H⁺]（mol/L）</label><input id="hydrogenConcentration" step="any" type="number" value="0.0001"/>
+<button class="primary-button full-width" id="calculatePH" type="button">pHを計算</button><div aria-live="polite" class="result-card" id="phResults">pH</div></section>
+</div>
+<div class="three-column">
+<section class="panel tool-panel"><h3>化学式からモル質量</h3><p class="help-text">化学式を入力すると、登録済み原子量からモル質量を求めます。</p><label class="field-label" for="molarFormula">化学式</label><input id="molarFormula" spellcheck="false" value="H2O"/><button class="primary-button full-width" id="calculateMolarFormula" type="button">モル質量を計算</button><div aria-live="polite" class="result-card" id="molarFormulaResults">H₂O &asymp; 18.015 g/mol</div></section>
+<section class="panel tool-panel"><h3>圧力計算</h3><p class="help-text">P = F/A。力Nと面積m&sup2;を入力。</p><label class="field-label" for="pressureForce">力 F（N）</label><input id="pressureForce" step="any" type="number" value="100"/><label class="field-label" for="pressureArea">面積 A（m&sup2;）</label><input id="pressureArea" step="any" type="number" value="0.5"/><button class="primary-button full-width" id="calculatePressure" type="button">圧力を計算</button><div aria-live="polite" class="result-card" id="pressureResults">圧力（Pa）</div></section>
+<section class="panel tool-panel"><h3>等加速度運動</h3><p class="help-text">v = v₀+at、s = v₀t+&frac12;at&sup2;。</p><label class="field-label" for="motionV0">初速度 v₀（m/s）</label><input id="motionV0" step="any" type="number" value="0"/><label class="field-label" for="motionAcceleration">加速度 a（m/s&sup2;）</label><input id="motionAcceleration" step="any" type="number" value="2"/><label class="field-label" for="motionTime">時間 t（s）</label><input id="motionTime" step="any" type="number" value="5"/><button class="primary-button full-width" id="calculateMotion" type="button">運動を計算</button><div aria-live="polite" class="result-card pre-result" id="motionResults">速度・変位</div></section>
+</div>
+<section class="panel tool-panel"><h3>化学反応式の係数合わせ</h3><p class="help-text">反応物と生成物を「+」で区切り、矢印を「&rarr;」または「-&gt;」で入力します。分子式の元素数をそろえ、最小整数比を探します。</p>
+<label class="field-label" for="reactionEquation">化学反応式</label><input id="reactionEquation" spellcheck="false" value="H2 + O2 -&gt; H2O"/>
+<button class="primary-button full-width" id="balanceReaction" type="button">係数を合わせる</button><div aria-live="polite" class="result-card pre-result" id="reactionResults">例：H2 + O2 &rarr; H2O</div><p class="help-text">※基本的な元素記号と丸括弧に対応。イオンの電荷・電子・結晶水を含む式は対象外です。</p></section>
+<section class="panel tool-panel"><h3>多項式の記号微分・不定積分・定積分</h3><p class="help-text">xの多項式（例：3x^3-2x+1）を記号的に処理します。sin(x)など一般関数の記号積分は対象外です。定積分は多項式の原始関数から厳密に計算します。</p>
+<label class="field-label" for="polynomialCalculusExpression">f(x)</label><input id="polynomialCalculusExpression" spellcheck="false" value="3x^3-2x+1"/>
+<div class="two-inputs"><div><label class="field-label" for="polynomialCalculusLower">定積分 下限</label><input id="polynomialCalculusLower" step="any" type="number" value="0"/></div><div><label class="field-label" for="polynomialCalculusUpper">定積分 上限</label><input id="polynomialCalculusUpper" step="any" type="number" value="2"/></div></div>
+<div class="two-inputs"><div><label class="field-label" for="taylorCenter">展開中心 x₀</label><input id="taylorCenter" step="any" type="number" value="1"/></div><div><label class="field-label" for="taylorOrder">テイラー次数（0〜8）</label><input id="taylorOrder" max="8" min="0" step="1" type="number" value="3"/></div></div>
+<div class="button-grid two-buttons"><button class="primary-button" id="differentiatePolynomial" type="button">導関数 f&prime;(x)</button><button class="secondary-button" id="integratePolynomial" type="button">不定積分</button><button class="secondary-button" id="definitePolynomial" type="button">定積分</button><button class="secondary-button" id="taylorPolynomial" type="button">テイラー展開</button></div><div aria-live="polite" class="result-card pre-result" id="polynomialCalculusResults">結果がここに表示されます。</div></section>
+</section>
+<section aria-labelledby="databaseHeading" class="tab-panel" id="databaseTab">
+<div class="section-intro"><p class="eyebrow">OFFLINE MATH ENCYCLOPEDIA</p><h2 id="databaseHeading">数学・理科データベース</h2><p>公式・用語・例題をアプリ内に収録。インターネット接続なしでも検索できる辞典です。</p></div>
+<section class="panel tool-panel">
+<div class="database-controls">
+<div><label class="field-label" for="databaseSearch">キーワード検索</label><input id="databaseSearch" placeholder="例：三平方、微分、オーム、モル濃度、正規分布" type="search"/></div>
+<div><label class="field-label" for="databaseCategory">分野</label><select id="databaseCategory"><option value="all">すべて</option><option value="代数">代数</option><option value="解析">解析</option><option value="幾何">幾何</option><option value="三角関数">三角関数</option><option value="確率・統計">確率・統計</option><option value="数論">数論</option><option value="物理">物理</option><option value="化学">化学</option><option value="工学">工学</option><option value="和算">和算</option><option value="日本の伝統単位">日本の伝統単位</option><option value="漢数字・大数単位">漢数字・大数単位</option><option value="数の読み方">数の読み方</option><option value="暦・時間">暦・時間</option><option value="天文学">天文学</option><option value="逆引き公式">逆引き公式</option><option value="公式パターン">公式パターン</option><option value="用語集">用語集</option><option value="単位・物理量">単位・物理量</option><option value="例題">例題</option><option value="数学史">数学史</option><option value="線形代数">線形代数</option><option value="数列・級数">数列・級数</option><option value="離散数学">離散数学</option><option value="集合・論理">集合・論理</option><option value="微分方程式">微分方程式</option><option value="数学定数">数学定数</option></select></div>
+</div>
+<div class="database-controls database-secondary-controls">
+<div><label class="field-label" for="databasePattern">公式パターン検索</label><input id="databasePattern" placeholder="例：a*x+b、x^2、sin(x)" type="search"/></div>
+<div><label class="field-label" for="databaseInverse">逆引き（求めたい文字）</label><input id="databaseInverse" placeholder="例：r、t、v、x" type="search"/></div>
+</div>
+<div class="button-row"><button class="secondary-button" id="databaseShowAll" type="button">すべて</button><button class="secondary-button" id="databaseShowFavorites" type="button">&starf; お気に入り</button><button class="secondary-button" id="databaseShowHistory" type="button">最近見た項目</button></div>
+<div class="button-row"><button class="secondary-button" id="exportMathDatabase" type="button">数式DBをJSON保存</button><button class="secondary-button" id="importMathDatabase" type="button">JSONを読み込み</button><input accept="application/json,.json" hidden="" id="importMathDatabaseFile" type="file"/></div>
+<p aria-live="polite" class="help-text" id="databaseCount"></p><div class="database-grid" id="databaseEntries"></div>
+</section>
+<section class="panel tool-panel database-editor-panel"><h3>自分の公式・用語を登録／編集</h3><p class="help-text">自作データはこのブラウザーに保存されます。計算機に送る式は、変数に数値を入れたあと使ってください。</p>
+<div class="database-controls"><div><label class="field-label" for="mathEntryTitle">タイトル</label><input id="mathEntryTitle" maxlength="100" placeholder="例：自分で見つけた公式"/></div><div><label class="field-label" for="mathEntryCategory">分野</label><select id="mathEntryCategory"><option>代数</option><option>解析</option><option>幾何</option><option>三角関数</option><option>確率・統計</option><option>数論</option><option>物理</option><option>化学</option><option>工学</option><option>和算</option><option>日本の伝統単位</option><option>漢数字・大数単位</option><option>数の読み方</option><option>暦・時間</option><option>天文学</option><option>逆引き公式</option><option>公式パターン</option><option>用語集</option><option>単位・物理量</option><option>例題</option><option>数学史</option><option>線形代数</option><option>数列・級数</option><option>離散数学</option><option>集合・論理</option><option>微分方程式</option><option>数学定数</option></select></div></div>
+<label class="field-label" for="mathEntryFormula">表示する公式・内容</label><input id="mathEntryFormula" maxlength="300" placeholder="例：v = v0 + a*t"/>
+<label class="field-label" for="mathEntryCalc">電卓に送る式（任意）</label><input id="mathEntryCalc" maxlength="300" placeholder="例：v0+a*t"/>
+<label class="field-label" for="mathEntryDescription">説明</label><textarea id="mathEntryDescription" maxlength="1000" placeholder="意味・条件・注意点" rows="2"></textarea>
+<label class="field-label" for="mathEntryKeywords">検索キーワード（カンマ区切り）</label><input id="mathEntryKeywords" maxlength="300" placeholder="例：速度,加速度,等加速度"/>
+<div class="button-row"><button class="primary-button" id="saveMathEntry" type="button">公式を保存</button><button class="secondary-button" hidden="" id="cancelMathEntryEdit" type="button">編集をキャンセル</button></div><p class="help-text" id="mathEntryMessage" role="status"></p>
+</section>
+</section>
+<section aria-labelledby="customHeading" class="tab-panel" id="customTab">
+<div class="section-intro"><p class="eyebrow">PERSONAL FUNCTIONS</p><h2 id="customHeading">自作関数・計算テンプレート</h2><p>自分で関数を登録すると、通常の計算式から f(3) のように呼び出せます。</p></div>
+<div class="two-column">
+<section class="panel tool-panel"><h3>オリジナル関数を登録</h3>
+<label class="field-label" for="customFunctionName">関数名（英字で開始）</label><input id="customFunctionName" maxlength="20" spellcheck="false" value="f"/>
+<label class="field-label" for="customFunctionExpression">式（変数 x を使用）</label><input id="customFunctionExpression" maxlength="300" spellcheck="false" value="x^2+2x+1"/>
+<button class="primary-button full-width" id="saveCustomFunction" type="button">関数を保存</button><div class="custom-function-list" id="customFunctionList"></div><p class="help-text" id="customFunctionMessage" role="status"></p></section>
+<section class="panel tool-panel"><h3>計算テンプレート</h3><p class="help-text">選んだ式をメイン電卓へ送れます。数字や係数を書き換えて使ってね。</p>
+<div class="button-stack"><button class="secondary-button full-width calc-template" data-template="(a+b)^2" type="button">和の平方 (a+b)&sup2;</button><button class="secondary-button full-width calc-template" data-template="sqrt(a^2+b^2)" type="button">三平方の定理の斜辺</button><button class="secondary-button full-width calc-template" data-template="(-b+sqrt(b^2-4*a*c))/(2*a)" type="button">二次方程式の解（＋）</button><button class="secondary-button full-width calc-template" data-template="2*pi*r" type="button">円周</button><button class="secondary-button full-width calc-template" data-template="pi*r^2" type="button">円の面積</button><button class="secondary-button full-width calc-template" data-template="0.5*m*v^2" type="button">運動エネルギー</button><button class="secondary-button full-width calc-template" data-template="V*I" type="button">電力（V&times;I）</button></div></section>
+</div>
+</section>
+<section aria-labelledby="workbenchHeading" class="tab-panel" id="workbenchTab">
+<div class="section-intro"><p class="eyebrow">ADVANCED WORKBENCH</p><h2 id="workbenchHeading">拡張計算・ワークシート</h2><p>一括計算、変数、定数、誤差、日付、逆算、単位式、比較をAurora電卓内でまとめて扱います。</p></div>
+<div class="workbench-grid">
+<section class="panel tool-panel">
+<h3>変数・数値の保存</h3>
+<p class="help-text">A・B・Cのような名前で数値を保存し、通常の計算式でも使えます。大きな整数や小数も文字列で保持します。</p>
+<div class="two-inputs"><div><label class="field-label" for="variableName">変数名</label><input id="variableName" maxlength="20" value="A"/></div><div><label class="field-label" for="variableValue">数値</label><input id="variableValue" value="12345678901234567890.12345"/></div></div>
+<button class="primary-button full-width" id="saveVariable" type="button">変数を保存</button><p class="help-text" id="variableMessage" role="status"></p><div class="variable-list" id="variableList"></div>
+</section>
+<section class="panel tool-panel">
+<h3>数学・物理定数データベース</h3>
+<label class="field-label" for="constantSearch">定数を検索</label><input id="constantSearch" placeholder="&pi;、光速、アボガドロ&hellip;" type="search"/><div class="constant-grid" id="constantList"></div>
+</section>
+<section class="panel tool-panel">
+<h3>数値一覧・一括計算</h3><p class="help-text">xを使った式を指定範囲で最大1000件まで計算します。</p>
+<label class="field-label" for="batchExpression">計算式</label><input id="batchExpression" value="x^2+3*x+2"/>
+<div class="three-inputs"><div><label class="field-label" for="batchStart">開始</label><input id="batchStart" step="any" type="number" value="1"/></div><div><label class="field-label" for="batchEnd">終了</label><input id="batchEnd" step="any" type="number" value="10"/></div><div><label class="field-label" for="batchStep">間隔</label><input id="batchStep" step="any" type="number" value="1"/></div></div>
+<button class="primary-button full-width" id="runBatch" type="button">一括計算</button><div aria-live="polite" class="result-card pre-result" id="batchResults">結果がここに表示されます。</div>
+</section>
+<section class="panel tool-panel">
+<h3>分数計算</h3><p class="help-text">整数の分子・分母を使って分数を正確に計算し、約分した結果と小数近似を表示します。</p>
+<div class="two-inputs"><div><label class="field-label" for="fractionANum">分数A 分子</label><input id="fractionANum" inputmode="numeric" value="1"/></div><div><label class="field-label" for="fractionADen">分数A 分母</label><input id="fractionADen" inputmode="numeric" value="3"/></div></div>
+<div class="two-inputs"><div><label class="field-label" for="fractionBNum">分数B 分子</label><input id="fractionBNum" inputmode="numeric" value="2"/></div><div><label class="field-label" for="fractionBDen">分数B 分母</label><input id="fractionBDen" inputmode="numeric" value="5"/></div></div>
+<label class="field-label" for="fractionOperation">演算</label><select id="fractionOperation"><option value="add">A + B</option><option value="subtract">A &minus; B</option><option value="multiply">A &times; B</option><option value="divide">A &divide; B</option></select>
+<button class="primary-button full-width" id="calculateFraction" type="button">分数を計算</button><div aria-live="polite" class="result-card pre-result" id="fractionResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>比率・比例計算</h3><p class="help-text">整数比を最簡比に約分し、片方の量を指定してもう片方の量を求めます。</p>
+<div class="two-inputs"><div><label class="field-label" for="ratioA">比 A</label><input id="ratioA" inputmode="numeric" value="12"/></div><div><label class="field-label" for="ratioB">比 B</label><input id="ratioB" inputmode="numeric" value="18"/></div></div>
+<label class="field-label" for="ratioTargetFirst">Aをこの値にしたとき</label><input id="ratioTargetFirst" inputmode="decimal" value="100"/>
+<button class="primary-button full-width" id="calculateRatio" type="button">比率を計算</button><div aria-live="polite" class="result-card pre-result" id="ratioResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>順列・組み合わせ</h3><p class="help-text">nPr・nCr・階乗をBigIntで正確に計算します。</p>
+<div class="two-inputs"><div><label class="field-label" for="combN">n</label><input id="combN" max="1500" min="0" type="number" value="10"/></div><div><label class="field-label" for="combR">r</label><input id="combR" max="1500" min="0" type="number" value="3"/></div></div>
+<label class="field-label" for="combOperation">計算の種類</label><select id="combOperation"><option value="ncr">組み合わせ nCr</option><option value="npr">順列 nPr</option><option value="factorial">階乗 n!</option></select>
+<button class="primary-button full-width" id="calculateCombinatorics" type="button">計算する</button><div aria-live="polite" class="result-card pre-result" id="combinatoricsResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>誤差・有効数字</h3>
+<label class="field-label" for="sigValue">丸める数値</label><input id="sigValue" inputmode="decimal" type="text" value="12345.6789"/>
+<div class="two-inputs"><div><label class="field-label" for="sigDigits">有効数字</label><input id="sigDigits" max="100" min="1" type="number" value="4"/></div><div><label class="field-label" for="roundMode">丸め方</label><select id="roundMode"><option value="round">四捨五入</option><option value="ceil">切り上げ</option><option value="floor">切り捨て</option></select></div></div>
+<button class="secondary-button full-width" id="calculateSignificant" type="button">有効数字を計算</button><div aria-live="polite" class="result-card pre-result" id="sigResults"></div>
+<h4>測定誤差</h4><div class="two-inputs"><div><label class="field-label" for="errorMeasured">測定値</label><input id="errorMeasured" inputmode="decimal" type="text" value="9.98"/></div><div><label class="field-label" for="errorReference">基準値</label><input id="errorReference" inputmode="decimal" type="text" value="10"/></div></div><button class="secondary-button full-width" id="calculateError" type="button">誤差を計算</button><div aria-live="polite" class="result-card pre-result" id="errorResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>日付・時間計算</h3><div class="two-inputs"><div><label class="field-label" for="dateStart">開始日</label><input id="dateStart" type="date" value="2026-01-01"/></div><div><label class="field-label" for="dateEnd">終了日</label><input id="dateEnd" type="date" value="2026-12-31"/></div></div>
+<label class="field-label" for="dateAddDays">開始日から加算・減算する日数</label><input id="dateAddDays" step="1" type="number" value="30"/><div class="two-inputs"><div><label class="field-label" for="timeStart">開始時刻</label><input id="timeStart" type="time" value="09:00"/></div><div><label class="field-label" for="timeEnd">終了時刻</label><input id="timeEnd" type="time" value="17:30"/></div></div><button class="primary-button full-width" id="calculateDates" type="button">日付・時刻を計算</button><div aria-live="polite" class="result-card pre-result" id="dateResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>計算ワークシート</h3><p class="help-text">1行に1つの計算式。`名前 = 式` と書くと名前付き結果になります。</p>
+<label class="field-label" for="worksheetTitle">シート名</label><input id="worksheetTitle" value="計算ノート"/>
+<label class="field-label" for="worksheetExpressions">計算式（1行ごと）</label><textarea id="worksheetExpressions" rows="6">面積 = 5*8
+体積 = 5*8*3
+円の面積 = pi*2^2</textarea>
+<div class="button-grid two-buttons"><button class="primary-button" id="runWorksheet" type="button">まとめて計算</button><button class="secondary-button" id="saveWorksheet" type="button">シートを保存</button></div><p class="help-text" id="worksheetMessage" role="status"></p><div class="result-card pre-result" id="worksheetResults"></div><h4>保存済みシート</h4><div class="worksheet-list" id="worksheetList"></div>
+</section>
+<section class="panel tool-panel">
+<h3>逆算・方程式を解く</h3><p class="help-text">xの範囲を走査し、符号変化区間を二分法で近似します。</p>
+<label class="field-label" for="inverseEquation">方程式</label><input id="inverseEquation" value="2*x+3=11"/><div class="two-inputs"><div><label class="field-label" for="inverseMin">xの最小値</label><input id="inverseMin" step="any" type="number" value="-100"/></div><div><label class="field-label" for="inverseMax">xの最大値</label><input id="inverseMax" step="any" type="number" value="100"/></div></div>
+<button class="primary-button full-width" id="solveInverse" type="button">xを逆算</button><div aria-live="polite" class="result-card pre-result" id="inverseResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>自動単位判定・単位付き計算</h3><p class="help-text">同じ種類の単位による加減算に対応。例：5m + 30cm、2尺 + 3寸、1kg - 250g。</p>
+<label class="field-label" for="unitExpression">単位を含む式</label><input id="unitExpression" value="5m + 30cm"/><button class="primary-button full-width" id="runUnitExpression" type="button">単位を判定して計算</button><div aria-live="polite" class="result-card pre-result" id="unitExpressionResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>計算結果の比較</h3><p class="help-text">1行に1つずつ、2〜20個の式を入力します。1つ目を基準に差も表示します。</p>
+<label class="field-label" for="comparisonExpressions">比較する式</label><textarea id="comparisonExpressions" rows="5">3.14*100
+pi*100
+355/113</textarea><button class="primary-button full-width" id="compareCalculations" type="button">計算を比較</button><div aria-live="polite" class="result-card pre-result" id="comparisonResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>計算式のエラー診断</h3><p class="help-text">エラー原因と修正のヒントを確認できます。通常電卓での計算エラーにも案内を表示します。</p>
+<label class="field-label" for="diagnosticExpression">確認する式</label><input id="diagnosticExpression" value="2*(3+4"/><button class="secondary-button full-width" id="diagnoseExpression" type="button">式を診断</button><div aria-live="polite" class="result-card pre-result" id="diagnosticResults"></div>
+</section>
+<section class="panel tool-panel">
+<h3>漢数字・大字入力</h3><p class="help-text">万・億・兆・京などの漢数字を整数として認識します。</p>
+<label class="field-label" for="kanjiNumberInput">漢数字</label><input id="kanjiNumberInput" value="一億二千三百四十五万六千七百八十九"/><button class="primary-button full-width" id="insertKanjiNumber" type="button">数字に変換して電卓へ</button><div aria-live="polite" class="result-card pre-result" id="kanjiNumberResult"></div>
+<label class="field-label" for="decimalPrecision">高精度計算の除算精度（小数桁）</label><input id="decimalPrecision" max="500" min="20" step="10" type="number" value="100"/><p class="help-text">巨大整数はBigIntで正確に処理し、小数除算は指定桁数で四捨五入します。三角関数などは既存の数値エンジンを使います。</p>
+</section>
+</div>
+</section>
+<section aria-labelledby="settingsHeading" class="tab-panel" id="settingsTab">
+<div class="section-intro"><p class="eyebrow">PREFERENCES / PRIVACY</p><h2 id="settingsHeading">設定・プライバシー</h2><p>見た目や操作感を調整し、バックアップを暗号化できます。</p></div>
+<div class="two-column">
+<section class="panel tool-panel">
+<h3>見た目の設定</h3>
+<label class="field-label" for="calculatorSkin">カラーテーマ</label>
+<select id="calculatorSkin"><option value="aurora">Aurora Blue</option><option value="sakura">桜</option><option value="mint">ミント</option><option value="sunset">サンセット</option><option value="mono">モノクロ</option></select>
+<label class="field-label" for="uiScale">文字・UIサイズ</label><input id="uiScale" max="1.2" min="0.9" step="0.05" type="range" value="1"/>
+<output id="uiScaleValue">100%</output>
+<label class="field-label" for="numberDisplayMode">計算結果の数字表示</label><select id="numberDisplayMode"><option value="all">すべての表記を表示</option><option value="group3">3桁区切り</option><option value="group4">4桁区切り</option><option value="arabicJapanese">数字＋漢字単位（例：1億2345万6789）</option><option value="kanji">漢数字</option><option value="daiji">大字</option></select>
+<label class="field-label" for="customPageColor">ページ背景色</label><input id="customPageColor" type="color" value="#eef3fb"/>
+<button class="secondary-button full-width" id="resetAppearance" type="button">見た目を初期設定に戻す</button>
+<p class="help-text">設定はこのブラウザー内に保存されます。ブラウザーのデータ消去や別端末への移動では引き継がれません。</p>
+</section>
+<section class="panel tool-panel accessibility-panel">
+<h3>アクセシビリティ設定</h3>
+<p class="help-text">読みやすさ・操作しやすさを調整します。設定はこのブラウザーに保存されます。</p>
+<label class="field-label" for="accessTextScale">文字サイズ</label><input id="accessTextScale" max="1.5" min="0.9" step="0.05" type="range" value="1"/><output id="accessTextScaleValue">100%</output>
+<label class="check-row"><input id="accessHighContrast" type="checkbox"/> 高コントラスト表示</label>
+<label class="check-row"><input id="accessLargeTargets" type="checkbox"/> ボタン・入力欄を大きくする</label>
+<label class="check-row"><input id="accessReduceMotion" type="checkbox"/> アニメーション・動きを減らす</label>
+<label class="check-row"><input checked="" id="accessStrongFocus" type="checkbox"/> キーボードのフォーカスを見やすくする</label>
+<label class="check-row"><input id="accessUnderlineLinks" type="checkbox"/> リンクに下線を付ける</label>
+<button class="secondary-button full-width" id="accessReset" type="button">アクセシビリティ設定を初期化</button>
+</section>
+<section class="panel tool-panel">
+<h3>暗号化バックアップ</h3>
+<p class="help-text">パスワードから鍵を生成し、JSONバックアップをAES-GCMで暗号化します。復元には同じパスワードが必要です。</p>
+<label class="field-label" for="backupPassword">バックアップ用パスワード（12文字以上推奨）</label><input autocomplete="new-password" id="backupPassword" minlength="8" placeholder="パスワード" type="password"/>
+<button class="primary-button full-width" id="exportEncryptedBackup" type="button">暗号化バックアップを保存</button>
+<label class="field-label" for="importEncryptedFile">暗号化バックアップファイル</label><input accept=".auroraenc,application/octet-stream" id="importEncryptedFile" type="file"/>
+<button class="secondary-button full-width" id="importEncryptedBackup" type="button">暗号化バックアップを復元</button>
+<p class="help-text" id="securityMessage" role="status"></p>
+</section>
+</div>
+<section class="panel tool-panel">
+<h3>保存場所と安全性について</h3>
+<p>このアプリはサーバーにログイン情報を送らず、計算履歴などをブラウザーのローカル保存領域に保存します。同じ端末・同じブラウザープロファイルで使う前提です。</p>
+<p class="help-text">暗号化バックアップのパスワードを忘れると復元できません。通常のJSONバックアップは暗号化されないため、共有・送信する前に内容を確認してください。ローカルHTMLの画面だけで端末所有者からデータを完全に隠すことはできません。</p>
+</section>
+</section>
+<section aria-labelledby="guideHeading" class="tab-panel" id="guideTab">
+<div class="section-intro">
+<p class="eyebrow">HELP / BEGINNER GUIDE</p>
+<h2 id="guideHeading">📖 使い方ガイド</h2>
+<p>機能を選ぶと「何ができるか」「入力例」「計算式」「答え」を確認できます。実際の計算画面と行き来しながら使ってね。</p>
+</div>
+<section class="panel tool-panel guide-section">
+<h3>行列計算って何？</h3>
+<p>行列は、数字を横（行）と縦（列）に並べたものです。たとえば <code>A = [[1, 2], [3, 4]]</code> は2行2列。1行目が「1, 2」、2行目が「3, 4」です。</p>
+<p class="help-text">この電卓の行列入力欄では、1行につき数字をカンマで区切って入力します。例のように改行して入力してください。</p>
+<div class="guide-example"><strong>行列Aの記入例</strong><pre>1, 2
+3, 4</pre><strong>行列Bの記入例</strong><pre>5, 6
+7, 8</pre></div>
+</section>
+<div class="three-column guide-grid">
+<section class="panel tool-panel">
+<h3>① 足し算：A + B</h3>
+<p>同じ位置にある数字を足します。AとBは同じ大きさである必要があります。</p>
+<div class="guide-example"><strong>計算式</strong><pre>1+5=6   2+6=8
+3+7=10  4+8=12</pre><strong>答え</strong><pre>6, 8
+10, 12</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>② 引き算：A &minus; B</h3>
+<p>同じ位置にある数字を引きます。</p>
+<div class="guide-example"><strong>入力例</strong><pre>A: 5, 8
+   7, 9
+
+B: 1, 3
+   2, 4</pre><strong>計算式・答え</strong><pre>5&minus;1=4  8&minus;3=5
+7&minus;2=5  9&minus;4=5
+
+4, 5
+5, 5</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>③ 掛け算：A &times; B</h3>
+<p>Aの横1行とBの縦1列を掛け合わせ、答えを足します。</p>
+<div class="guide-example"><strong>左上の計算</strong><pre>1&times;5 + 2&times;7
+= 5 + 14
+= 19</pre><strong>4つの答え</strong><pre>左上: 19
+右上: 22
+左下: 43
+右下: 50</pre><strong>結果</strong><pre>19, 22
+43, 50</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>④ 転置：Aᵀ</h3>
+<p>行と列を入れ替えます。</p>
+<div class="guide-example"><strong>入力</strong><pre>1, 2
+3, 4</pre><strong>入れ替え</strong><pre>1列目が 1, 3
+2列目が 2, 4</pre><strong>答え</strong><pre>1, 3
+2, 4</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>⑤ 行列式：det(A)</h3>
+<p>2行2列の行列なら、左上&times;右下から右上&times;左下を引きます。</p>
+<div class="guide-example"><strong>入力</strong><pre>1, 2
+3, 4</pre><strong>計算式</strong><pre>det(A) = 1&times;4 &minus; 2&times;3
+       = 4 &minus; 6
+       = &minus;2</pre><strong>答え</strong><pre>&minus;2</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>⑥ 逆行列：A⁻&sup1;</h3>
+<p>行列の「逆向きの働き」をする行列で、連立方程式などに使います。総合版では演算メニューから「Aの逆行列」または「Bの逆行列」を選んで計算できます。正方行列で、行列式が0ではない場合に存在します。</p>
+<div class="guide-example"><strong>2&times;2の公式</strong><pre>A = [a, b; c, d]
+
+A⁻&sup1; = 1/(ad&minus;bc)
+      &times; [d, &minus;b; &minus;c, a]</pre><strong>この例</strong><pre>A = [1, 2; 3, 4]
+det(A) = &minus;2
+
+A⁻&sup1; = [&minus;2, 1; 1.5, &minus;0.5]</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>⑦ ランク</h3>
+<p>行列に含まれる独立した情報の数を表します。上級者向けの考え方です。</p>
+<div class="guide-example"><strong>例</strong><pre>1, 2
+2, 4</pre><p>2行目は1行目を2倍したものです。独立した行は1つなので、ランクは1です。</p></div>
+</section>
+<section class="panel tool-panel">
+<h3>⑧ 固有値</h3>
+<p>行列で変換したとき、特定の方向に何倍になるかを調べます。総合版では演算メニューから「Aの固有値（2&times;2）」を選べます。現在の対応は2&times;2行列です。</p>
+<div class="guide-example"><strong>例</strong><pre>A = [2, 0; 0, 3]</pre><p>x方向は2倍、y方向は3倍。固有値は2と3です。</p></div>
+</section>
+<section class="panel tool-panel">
+<h3>行列計算の注意</h3>
+<ul>
+<li>足し算・引き算は、AとBの行数・列数を同じにします。</li>
+<li>掛け算は、Aの列数とBの行数を同じにします。</li>
+<li>行列式は正方行列（行数と列数が同じ行列）で計算します。</li>
+<li>入力は1行ずつ、数字をカンマで区切ります。</li>
+</ul>
+</section>
+</div>
+<section class="panel tool-panel guide-section">
+<h3>関数グラフは「式」を入力する</h3>
+<p>f₁(x) などの入力欄には、y = の右側に書く式を入力します。たとえば y = x&sup2; なら <code>x^2</code> と入力します。掛け算は省略せず <code>2*x</code> と書いてください。</p>
+<div class="guide-table-wrap"><table class="guide-table">
+<thead><tr><th>やりたいこと</th><th>入力する式</th><th>できること・グラフの形</th></tr></thead>
+<tbody>
+<tr><td>直線</td><td><code>2*x+1</code></td><td>y = 2x + 1。右上がりの直線</td></tr>
+<tr><td>放物線</td><td><code>x^2</code></td><td>y = x&sup2;。U字型</td></tr>
+<tr><td>下向きの放物線</td><td><code>-x^2</code></td><td>上下が逆のU字型</td></tr>
+<tr><td>3次関数</td><td><code>x^3</code></td><td>S字型の曲線</td></tr>
+<tr><td>絶対値</td><td><code>abs(x)</code></td><td>V字型</td></tr>
+<tr><td>平方根</td><td><code>sqrt(x+5)</code></td><td>xが&minus;5以上の範囲で描画</td></tr>
+<tr><td>波</td><td><code>sin(x)</code></td><td>波の形。DEG/RAD設定に注意</td></tr>
+<tr><td>余弦波</td><td><code>cos(x)+x</code></td><td>波に直線的な増加を加えた形</td></tr>
+<tr><td>指数関数</td><td><code>2^x</code></td><td>右へ行くほど急激に増える</td></tr>
+<tr><td>対数関数</td><td><code>log(x)</code></td><td>xが正の範囲で使う</td></tr>
+<tr><td>パラメーター</td><td><code>a*x</code></td><td>スライダーでaを動かすと傾きが変わる</td></tr>
+<tr><td>上下に動かす</td><td><code>x^2-a</code></td><td>aを動かすと放物線が上下する</td></tr>
+</tbody>
+</table></div>
+<p class="help-text">対応関数：sqrt、abs、sin、cos、tan、asin、acos、atan、log、ln、exp、floor、ceil、round。定数 pi、e、ans も使えます。累乗は ^、掛け算は * です。</p>
+</section>
+<div class="three-column guide-grid">
+<section class="panel tool-panel">
+<h3>複数の関数</h3>
+<p>f₁(x)〜f₄(x)に式を入れると、最大4本を同時に表示できます。使わない欄は空欄でOK。</p>
+<div class="guide-example"><pre>f₁(x): x^2
+f₂(x): 2*x+3</pre><p>放物線と直線を比べられます。</p></div>
+</section>
+<section class="panel tool-panel">
+<h3>拡大・縮小・移動</h3>
+<p>＋拡大／&minus;縮小ボタン、またはPCのホイールで拡大縮小。グラフをドラッグすると表示範囲を移動できます。スマホはタッチ操作に対応します。</p>
+</section>
+<section class="panel tool-panel">
+<h3>座標・関数値</h3>
+<p>グラフ上にマウスを置くか、スマホでタップするとx座標と各関数の値を確認できます。</p>
+<div class="guide-example"><pre>f(x) = x^2
+x = 2
+y = 2^2 = 4</pre><p>点は (2, 4) です。</p></div>
+</section>
+<section class="panel tool-panel">
+<h3>交点を求める</h3>
+<p>2つの式が同じ値になる場所を探します。</p>
+<div class="guide-example"><pre>y = x^2
+y = 2*x+3
+
+x^2 = 2*x+3
+x^2&minus;2*x&minus;3 = 0
+(x&minus;3)(x+1) = 0
+
+x = 3 または &minus;1
+交点：(3, 9)、(&minus;1, 1)</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>接線・微分係数</h3>
+<p>指定した場所での傾きと、そこに触れる直線を表示します。</p>
+<div class="guide-example"><pre>y = x^2
+x = 2
+微分：y' = 2*x
+傾き：2*2 = 4
+接線：y = 4*x&minus;4</pre></div>
+</section>
+<section class="panel tool-panel">
+<h3>定積分・面積</h3>
+<p>指定区間で、グラフとx軸の間の符号付き面積を数値近似します。</p>
+<div class="guide-example"><pre>y = x
+範囲：x = 0 から 2
+
+&int;₀&sup2; x dx
+= [x&sup2;/2]₀&sup2;
+= 2</pre><p>この例では面積も2です。</p></div>
+</section>
+<section class="panel tool-panel">
+<h3>数値を動かす</h3>
+<p>式に変数aを使うと、スライダーで値を変えられます。</p>
+<div class="guide-example"><pre>y = a*x^2</pre><p>aが正なら上向き、負なら下向き。絶対値が大きいほど細くなります。アニメーション開始で自動変化します。</p></div>
+</section>
+<section class="panel tool-panel">
+<h3>PNGで保存</h3>
+<p>グラフを描いたあと「PNGで保存」を押すと、現在のグラフを画像として保存できます。レポートやノートに貼り付けられます。</p>
+</section>
+<section class="panel tool-panel">
+<h3>まず試す練習</h3>
+<ol>
+<li>f₁に <code>x^2</code> を入力して描画。</li>
+<li>f₂に <code>2*x+3</code> を入力して、もう一度描画。</li>
+<li>グラフ上をタップ／マウス操作して座標を確認。</li>
+<li>交点・接線・積分を順番に試す。</li>
+<li>PNG保存で画像を作る。</li>
+</ol>
+</section>
+</div>
+<section class="panel tool-panel guide-extra">
+<h3>総合版で追加された機能</h3>
+<div class="guide-grid">
+<div class="guide-example"><b>行列の拡張</b><pre>逆行列・階数・トレース
+2&times;2固有値
+A &times; X = B の解法</pre></div>
+<div class="guide-example"><b>複素数の拡張</b><pre>共役・偏角・極形式
+Aの2乗・Bの2乗</pre></div>
+<div class="guide-example"><b>連立方程式</b><pre>2*x+y=7
+x-y=2</pre></div>
+<div class="guide-example"><b>数値微分・積分</b><pre>f(x)=x^3-3*x
+x₀=2、積分 0〜2</pre></div>
+<div class="guide-example"><b>プログラマー計算</b><pre>1010 AND 1100
+ビット幅：8 / 16 / 32 / 64</pre></div>
+<div class="guide-example"><b>図形計算</b><pre>円・三角形・長方形
+球・立方体・円柱・円錐</pre></div>
+<div class="guide-example"><b>統計拡張</b><pre>四分位数
+相関係数・回帰直線
+ヒストグラム</pre></div>
+<div class="guide-example"><b>3Dグラフ</b><pre>sin(sqrt(x^2+y^2))
+ドラッグで回転</pre></div>
+</div>
+</section>
+<section class="panel tool-panel guide-section">
+<h3>追加された数学ツール・設定</h3>
+<p>「素数・和算」では上限付きの素数表、鶴亀算、正多角形による円周率の近似を扱います。グラフ画面には極限の左右からの数値確認、数列の収束チェック、漸化式の反復計算、富士山・多摩川の模式プロフィールを追加しました。</p>
+<p>富士山と多摩川のプロフィールは形を示すための計算モデルです。実際の測量・標高データではありません。極限や収束の各チェックも、数値を調べる補助機能であり、数学的な証明ではありません。</p>
+</section>
+<section class="panel tool-panel guide-section">
+<h3>メイン電卓の虚数 i とグラフの &theta;</h3>
+<p>メイン電卓では <code>i</code> を虚数単位として使えます。たとえば <code>i^2</code> は &minus;1、<code>sqrt(-1)</code> は i、<code>(2+3i)*(1-i)</code> は複素数の計算です。三角関数・平方根・指数・対数も一部の複素数入力に対応します。</p>
+<p>グラフでは <code>&theta;</code> または <code>theta</code> を横軸変数として使えます。また <code>x=1</code> のように入力すると垂直線を描きます。グラフ機能は実数の関数専用で、虚数 i は対象外です。</p>
+</section>
+<p class="help-text guide-note">総合版の微分・積分、連立方程式、固有値などには数値近似・対応範囲の制限があります。結果表示の注記も確認してください。</p>
+</section>
+<footer class="app-footer">
+<p>計算結果は近似値として表示される場合があります。金融・医療・工学など正確性が重要な用途では、結果を別の方法でも確認してください。</p>
+<p>ローカルファイルでの保存可否はブラウザー設定などに左右されます。大事な履歴はJSONバックアップで保存してください。</p>
+</footer>
+<section aria-labelledby="numericDatabaseHeading" class="tab-panel" id="numericDatabaseTab">
+<div class="section-intro"><p class="eyebrow">AURORA NUMERICAL ATLAS</p><h2 id="numericDatabaseHeading">数値データベース</h2><p>地理・人口・気象・経済・宇宙・生物・スポーツなどの「実際の数字」を集める独立データベースです。数値には基準日・単位・出典を付けて管理します。</p></div>
+<section class="panel tool-panel">
+<div class="numeric-notice"><strong>データについて</strong><span>この版はオフラインで使える収録時点のスナップショットです。人口・物価・記録などは変化するため、基準日と出典を確認してね。自動更新はせず、更新値は手動追加またはJSON読み込みで反映します。</span></div>
+<div class="database-controls">
+<div><label class="field-label" for="numericSearch">キーワード検索</label><input id="numericSearch" placeholder="例：富士山、人口、東京、気温、光速" type="search"/></div>
+<div><label class="field-label" for="numericCategory">分野</label><select id="numericCategory"><option value="all">すべての分野</option></select></div>
+</div>
+<div class="database-controls database-secondary-controls">
+<div><label class="field-label" for="numericSort">並び順</label><select id="numericSort"><option value="default">おすすめ順</option><option value="value-desc">数値が大きい順</option><option value="value-asc">数値が小さい順</option><option value="name">名前順</option><option value="date">基準日が新しい順</option></select></div>
+<div><label class="field-label" for="numericUnitFilter">単位で絞り込み</label><input id="numericUnitFilter" placeholder="例：m、km、%、人、kg" type="search"/></div>
+</div>
+<div class="button-row"><button class="secondary-button" id="numericShowAll" type="button">すべて</button><button class="secondary-button" id="numericShowFavorites" type="button">&starf; お気に入り</button><button class="secondary-button" id="numericShowHistory" type="button">最近見た項目</button><button class="secondary-button" id="numericExportCsv" type="button">表示中をCSV保存</button></div>
+<p aria-live="polite" class="help-text" id="numericCount"></p><div class="numeric-grid" id="numericEntries"></div>
+</section>
+<section class="panel tool-panel"><h3>数値を比較</h3><p class="help-text">同じ単位・同じ定義の数値を選ぶと、差と倍率を計算できます。異なる単位同士は比較しません。</p>
+<div class="database-controls"><div><label class="field-label" for="numericCompareA">比較する数値 A</label><select id="numericCompareA"></select></div><div><label class="field-label" for="numericCompareB">比較する数値 B</label><select id="numericCompareB"></select></div></div>
+<button class="primary-button" id="numericCompareButton" type="button">差・倍率を計算</button><div aria-live="polite" class="result-card pre-result" id="numericCompareResult">比較する2件を選んでください。</div>
+</section>
+<section class="panel tool-panel"><h3>数値データを追加／編集</h3><p class="help-text">追加データはこのブラウザーに保存されます。時系列を入れる場合は JSON 配列で入力できます（例：[{"date":"2024","value":123}]）。</p>
+<div class="database-controls"><div><label class="field-label" for="numericEntryName">項目名</label><input id="numericEntryName" maxlength="120" placeholder="例：&cir;&cir;山の標高"/></div><div><label class="field-label" for="numericEntryCategory">分野</label><select id="numericEntryCategory"></select></div></div>
+<div class="database-controls"><div><label class="field-label" for="numericEntryValue">数値</label><input id="numericEntryValue" placeholder="例：3776" step="any" type="number"/></div><div><label class="field-label" for="numericEntryUnit">単位</label><input id="numericEntryUnit" maxlength="40" placeholder="例：m、km、人、%"/></div></div>
+<div class="database-controls"><div><label class="field-label" for="numericEntryPlace">地域・対象</label><input id="numericEntryPlace" maxlength="120" placeholder="例：日本・山梨県／静岡県"/></div><div><label class="field-label" for="numericEntryDate">基準日・期間</label><input id="numericEntryDate" maxlength="80" placeholder="例：2026-10-01、1991〜2020年"/></div></div>
+<div class="database-controls"><div><label class="field-label" for="numericEntrySource">出典名</label><input id="numericEntrySource" maxlength="150" placeholder="例：国土地理院"/></div><div><label class="field-label" for="numericEntryUrl">出典URL</label><input id="numericEntryUrl" maxlength="500" placeholder="https://..." type="url"/></div></div>
+<label class="field-label" for="numericEntryStatus">データの性質</label><select id="numericEntryStatus"><option value="公式・確定">公式・確定</option><option value="公式・概算">公式・概算</option><option value="測定・観測">測定・観測</option><option value="記録・ランキング">記録・ランキング</option><option value="推計">推計</option><option value="参考値">参考値</option><option value="ユーザー入力">ユーザー入力</option></select>
+<label class="field-label" for="numericEntryNote">説明・定義・注意点</label><textarea id="numericEntryNote" maxlength="1000" placeholder="値の定義、測定方法、補足など" rows="2"></textarea>
+<label class="field-label" for="numericEntrySeries">時系列データ（任意・JSON）</label><textarea id="numericEntrySeries" maxlength="5000" placeholder='[{"date":"2024","value":123},{"date":"2025","value":125}]' rows="2"></textarea>
+<div class="button-row"><button class="primary-button" id="saveNumericEntry" type="button">数値を保存</button><button class="secondary-button" hidden="" id="cancelNumericEntryEdit" type="button">編集をキャンセル</button></div><p class="help-text" id="numericEntryMessage" role="status"></p>
+</section>
+<section class="panel tool-panel"><h3>バックアップ・データ交換</h3><p class="help-text">JSONには自分で追加した数値、お気に入り、閲覧履歴が入ります。CSVは検索結果を表計算ソフトで開くときに便利です。</p>
+<div class="button-row"><button class="secondary-button" id="exportNumericJson" type="button">数値DBをJSON保存</button><button class="secondary-button" id="importNumericJson" type="button">JSONを読み込み</button><input accept="application/json,.json" hidden="" id="importNumericJsonFile" type="file"/></div><p class="help-text" id="numericBackupMessage" role="status"></p>
+</section>
+</section>
+<section aria-labelledby="quickToolsHeading" class="tab-panel" id="quickToolsTab">
+<div class="section-intro"><p class="eyebrow">AURORA QUICK TOOLS</p><h2 id="quickToolsHeading">クイックツール</h2><p>ちょっとした計算・変換・整理をすぐに実行できる軽量ツール集です。</p></div>
+<div class="tool-grid two-column">
+<section class="panel tool-panel"><h3>数値クイック計算</h3><div class="two-inputs"><div><label class="field-label" for="qtA">数値 A</label><input id="qtA" step="any" type="number" value="24"/></div><div><label class="field-label" for="qtB">数値 B</label><input id="qtB" step="any" type="number" value="18"/></div></div><div class="button-row"><button class="secondary-button" id="qtPercent" type="button">AのB%</button><button class="secondary-button" id="qtReversePercent" type="button">AはBの何%</button><button class="secondary-button" id="qtGcd" type="button">最大公約数</button><button class="secondary-button" id="qtLcm" type="button">最小公倍数</button></div><div class="button-row"><button class="secondary-button" id="qtPrime" type="button">Aの素数判定</button><button class="secondary-button" id="qtFactor" type="button">Aを素因数分解</button><button class="secondary-button" id="qtDivisors" type="button">Aの約数一覧</button></div><div aria-live="polite" class="result-card pre-result" id="qtMathResult">結果がここに表示されます。</div></section>
+<section class="panel tool-panel"><h3>ランダム・抽選</h3><div class="three-inputs"><div><label class="field-label" for="qtRandomMin">最小</label><input id="qtRandomMin" type="number" value="1"/></div><div><label class="field-label" for="qtRandomMax">最大</label><input id="qtRandomMax" type="number" value="100"/></div><div><label class="field-label" for="qtRandomCount">個数</label><input id="qtRandomCount" max="100" min="1" type="number" value="1"/></div></div><div class="button-row"><button class="primary-button" id="qtRandomGenerate" type="button">数字を抽選</button><button class="secondary-button" id="qtDice" type="button">サイコロ</button><button class="secondary-button" id="qtCoin" type="button">コイントス</button></div><label class="field-label" for="qtDrawList">くじ引き・シャッフルする項目（1行に1つ）</label><textarea id="qtDrawList" placeholder="A賞\nB賞\nC賞" rows="4"></textarea><div class="button-row"><button class="secondary-button" id="qtPickOne" type="button">1つ抽選</button><button class="secondary-button" id="qtShuffle" type="button">順番をシャッフル</button></div><div aria-live="polite" class="result-card pre-result" id="qtRandomResult">抽選結果がここに表示されます。</div></section>
+<section class="panel tool-panel"><h3>ストップウォッチ・タイマー</h3><div aria-live="off" class="timer-display" id="qtStopwatchDisplay">00:00.0</div><div class="button-row"><button class="primary-button" id="qtSwStart" type="button">開始</button><button class="secondary-button" id="qtSwLap" type="button">ラップ</button><button class="secondary-button" id="qtSwReset" type="button">リセット</button></div><div class="result-card pre-result" id="qtSwLaps">ラップ記録はありません。</div><div class="two-inputs"><div><label class="field-label" for="qtTimerMinutes">分</label><input id="qtTimerMinutes" max="999" min="0" type="number" value="1"/></div><div><label class="field-label" for="qtTimerSeconds">秒</label><input id="qtTimerSeconds" max="59" min="0" type="number" value="0"/></div></div><div class="button-row"><button class="primary-button" id="qtTimerStart" type="button">カウントダウン開始</button><button class="secondary-button" id="qtTimerStop" type="button">停止</button></div><div aria-live="polite" class="result-card timer-display" id="qtTimerDisplay">01:00</div></section>
+<section class="panel tool-panel"><h3>文字・テキストツール</h3><label class="field-label" for="qtTextInput">テキスト</label><textarea id="qtTextInput" placeholder="文字数や行数を調べたい文章を入力" rows="5"></textarea><div class="button-row"><button class="secondary-button" id="qtTextCount" type="button">文字数・行数</button><button class="secondary-button" id="qtTextTrim" type="button">空白を整理</button><button class="secondary-button" id="qtTextSort" type="button">行を並べ替え</button><button class="secondary-button" id="qtTextReverse" type="button">文字を逆順</button></div><div class="two-inputs"><input id="qtFindText" placeholder="検索する文字"/><input id="qtReplaceText" placeholder="置き換える文字"/></div><button class="secondary-button full-width" id="qtTextReplace" type="button">検索・置換</button><div aria-live="polite" class="result-card pre-result" id="qtTextResult"></div></section>
+<section class="panel tool-panel"><h3>数値リスト整理</h3><label class="field-label" for="qtNumberList">数値（カンマ・空白・改行で区切る）</label><textarea id="qtNumberList" placeholder="12, 5, 8, 12, 20" rows="4"></textarea><div class="button-row"><button class="secondary-button" id="qtDataSummary" type="button">統計要約</button><button class="secondary-button" id="qtDataSort" type="button">昇順に整列</button><button class="secondary-button" id="qtDataUnique" type="button">重複削除</button><button class="secondary-button" id="qtDataExtremes" type="button">最大・最小</button></div><div aria-live="polite" class="result-card pre-result" id="qtDataResult"></div></section>
+<section class="panel tool-panel"><h3>カレンダー補助</h3><div class="two-inputs"><div><label class="field-label" for="qtDateStart">基準日</label><input id="qtDateStart" type="date"/></div><div><label class="field-label" for="qtDateOffset">加減する日数</label><input id="qtDateOffset" type="number" value="30"/></div></div><div class="button-row"><button class="primary-button" id="qtDateCalculate" type="button">日付を計算</button><button class="secondary-button" id="qtDateToday" type="button">今日に戻す</button></div><div class="result-card pre-result" id="qtDateResult"></div></section>
+<section class="panel tool-panel"><h3>メモ・記録</h3><label class="field-label" for="qtMemoTitle">タイトル</label><input id="qtMemoTitle" maxlength="100" placeholder="メモのタイトル"/><label class="field-label" for="qtMemoBody">内容</label><textarea id="qtMemoBody" maxlength="5000" placeholder="計算メモ、アイデア、記録など" rows="3"></textarea><button class="primary-button full-width" id="qtMemoSave" type="button">メモを保存</button><div class="saved-list" id="qtMemoList"></div></section>
+<section class="panel tool-panel"><h3>機能ショートカット</h3><p class="help-text">よく使う画面へすばやく移動できます。</p><div class="shortcut-grid"><button data-go-tab="calculatorTab" type="button">電卓</button><button data-go-tab="workbenchTab" type="button">ワークシート</button><button data-go-tab="graphTab" type="button">関数グラフ</button><button data-go-tab="databaseTab" type="button">数式DB</button><button data-go-tab="numericDatabaseTab" type="button">数値DB</button><button data-go-tab="settingsTab" type="button">設定</button></div></section>
+</div>
+</section>
+<section aria-labelledby="labHeading" class="tab-panel" id="labTab">
+<div class="section-intro"><p class="eyebrow">AURORA LAB</p><h2 id="labHeading">シミュレーション・3D実験室</h2><p>入力条件を変えながら、身近な物理モデルと立体の性質を計算できます。教育用の簡易モデルです。</p></div>
+<div class="two-column">
+<section class="panel tool-panel"><h3>投射運動シミュレーター</h3><div class="three-inputs"><div><label class="field-label" for="labVelocity">初速度 (m/s)</label><input id="labVelocity" min="0" step="any" type="number" value="20"/></div><div><label class="field-label" for="labAngle">角度 (&deg;)</label><input id="labAngle" max="89" min="-89" step="any" type="number" value="45"/></div><div><label class="field-label" for="labHeight">初期高さ (m)</label><input id="labHeight" min="0" step="any" type="number" value="0"/></div></div><div class="two-inputs"><div><label class="field-label" for="labGravity">重力加速度 (m/s&sup2;)</label><input id="labGravity" min="0.0001" step="any" type="number" value="9.80665"/></div><div><label class="field-label" for="labAir">空気抵抗</label><select id="labAir"><option value="off">無視する（理想モデル）</option><option value="note">参考：現実には影響あり</option></select></div></div><button class="primary-button full-width" id="labSimulate" type="button">シミュレーション</button><div class="result-card pre-result" id="labSimulationResult"></div><canvas aria-label="投射運動の軌道を模式表示" class="tool-canvas" height="300" id="labTrajectoryCanvas" width="720"></canvas></section>
+<section class="panel tool-panel"><h3>3D・立体計算室</h3><label class="field-label" for="labSolid">立体の種類</label><select id="labSolid"><option value="cube">立方体</option><option value="box">直方体</option><option value="sphere">球</option><option value="cylinder">円柱</option><option value="cone">円すい</option></select><div class="three-inputs"><div><label class="field-label" for="labDimA">辺・半径 a</label><input id="labDimA" min="0" step="any" type="number" value="5"/></div><div><label class="field-label" for="labDimB">辺 b</label><input id="labDimB" min="0" step="any" type="number" value="4"/></div><div><label class="field-label" for="labDimC">高さ・辺 c</label><input id="labDimC" min="0" step="any" type="number" value="3"/></div></div><button class="primary-button full-width" id="labSolidCalc" type="button">体積・表面積を計算</button><div class="result-card pre-result" id="labSolidResult"></div><canvas aria-label="立体の簡易図" class="tool-canvas" height="260" id="labSolidCanvas" width="500"></canvas><p class="help-text">このプレビューは寸法比を反映した簡易立体表示です。精密な製造用CADではありません。複数パーツの設計・書き出しは下のCAD設計スタジオを使用してください。</p></section>
+</div>
+<section aria-labelledby="cadHeading" class="panel tool-panel cad-panel">
+<div class="panel-heading"><div><p class="eyebrow">AURORA CAD STUDIO</p><h3 id="cadHeading">CAD設計スタジオ</h3></div><span class="database-category">3Dモデリング</span></div>
+<p class="help-text">寸法が実際の比率に反映される簡易CADです。複数の基本立体を配置し、ドラッグで回転、ホイールで拡大・縮小できます。寸法単位は設計内で統一してください。</p>
+<div class="cad-layout">
+<div class="cad-controls">
+<h4>パーツを作成・編集</h4>
+<label class="field-label" for="cadObjectSelect">編集するパーツ</label><select id="cadObjectSelect"></select>
+<label class="field-label" for="cadObjectName">パーツ名</label><input id="cadObjectName" maxlength="60" value="直方体パーツ"/>
+<label class="field-label" for="cadShape">立体の種類</label><select id="cadShape"><option value="cube">立方体</option><option selected="" value="box">直方体</option><option value="sphere">球</option><option value="cylinder">円柱</option><option value="cone">円錐</option></select>
+<div class="cad-dimension-grid">
+<div><label class="field-label" for="cadDimA" id="cadLabelA">幅 X</label><input id="cadDimA" min="0.001" step="any" type="number" value="8"/></div>
+<div><label class="field-label" for="cadDimB" id="cadLabelB">奥行 Y</label><input id="cadDimB" min="0.001" step="any" type="number" value="5"/></div>
+<div><label class="field-label" for="cadDimC" id="cadLabelC">高さ Z</label><input id="cadDimC" min="0.001" step="any" type="number" value="3"/></div>
+</div>
+<h4>配置位置</h4>
+<div class="cad-dimension-grid">
+<div><label class="field-label" for="cadPosX">X位置</label><input id="cadPosX" step="any" type="number" value="0"/></div>
+<div><label class="field-label" for="cadPosY">Y位置</label><input id="cadPosY" step="any" type="number" value="0"/></div>
+<div><label class="field-label" for="cadPosZ">Z位置</label><input id="cadPosZ" step="any" type="number" value="0"/></div>
+</div>
+<div class="button-grid two-buttons"><button class="primary-button" id="cadAddObject" type="button">新しいパーツを追加</button><button class="secondary-button" id="cadUpdateObject" type="button">選択パーツを更新</button><button class="secondary-button" id="cadDeleteObject" type="button">選択パーツを削除</button><button class="secondary-button" id="cadFitView" type="button">全体を画面に合わせる</button></div>
+<div aria-live="polite" class="result-card pre-result" id="cadObjectInfo">パーツの寸法・体積・表面積がここに表示されます。</div>
+<p class="help-text">球はAを半径、円柱・円錐はAを半径・Cを高さとして扱います。立方体はAを一辺として扱います。Bは使用しません。</p>
+</div>
+<div class="cad-viewport-panel">
+<div aria-label="CAD表示方向" class="cad-toolbar" role="group">
+<button class="secondary-button" data-cad-view="iso" type="button">アイソメ</button><button class="secondary-button" data-cad-view="front" type="button">正面</button><button class="secondary-button" data-cad-view="top" type="button">上面</button><button class="secondary-button" data-cad-view="side" type="button">側面</button>
+</div>
+<canvas aria-label="ドラッグで回転できる3D CADビューポート" class="cad-canvas" height="560" id="cadCanvas" width="960"></canvas>
+<p class="help-text">操作：マウス／指でドラッグ＝回転、ホイール／ピンチではなくホイール操作＝拡大縮小。表示は正投影の簡易CADビューです。</p>
+<div class="cad-toolbar cad-export-toolbar"><button class="primary-button" id="cadExportStl" type="button">STL保存</button><button class="secondary-button" id="cadExportObj" type="button">OBJ保存</button><button class="secondary-button" id="cadExportSvg" type="button">3面図SVG保存</button><button class="secondary-button" id="cadExportJson" type="button">設計JSON保存</button><button class="secondary-button" id="cadImportJsonButton" type="button">設計JSON読込</button><input accept="application/json,.json" hidden="" id="cadImportJson" type="file"/></div>
+<p class="help-text" id="cadMessage" role="status"></p>
+</div>
+</div>
+</section>
+</section>
+<section aria-labelledby="dataLabHeading" class="tab-panel" id="dataLabTab">
+<div class="section-intro"><p class="eyebrow">AURORA DATA STUDIO</p><h2 id="dataLabHeading">データ分析・可視化スタジオ</h2><p>数値列や座標データを読み込み、統計量・回帰・グラフを確認できます。</p></div>
+<div class="two-column">
+<section class="panel tool-panel"><h3>統計・データサイエンス</h3><label class="field-label" for="dataLabValues">数値データ（カンマ・空白・改行区切り）</label><textarea id="dataLabValues" placeholder="12, 15, 13, 18, 20, 17" rows="5"></textarea><button class="primary-button full-width" id="dataLabAnalyze" type="button">統計分析</button><div class="result-card pre-result" id="dataLabStats"></div><h3 class="subheading">相関・線形回帰</h3><label class="field-label" for="dataLabPairs">x,y のペア（1行に1組）</label><textarea id="dataLabPairs" placeholder="1,2\n2,4\n3,5\n4,8" rows="4"></textarea><button class="secondary-button full-width" id="dataLabRegression" type="button">相関・回帰分析</button><div class="result-card pre-result" id="dataLabRegressionResult"></div></section>
+<section class="panel tool-panel"><h3>グラフ・可視化</h3><label class="field-label" for="vizData">グラフ用データ（カンマ・空白・改行区切り）</label><textarea id="vizData" placeholder="3, 8, 5, 12, 9, 15" rows="4"></textarea><div class="two-inputs"><div><label class="field-label" for="vizType">グラフ種類</label><select id="vizType"><option value="bar">棒グラフ</option><option value="line">折れ線グラフ</option><option value="scatter">散布図（順番を横軸に）</option></select></div><div><label class="field-label" for="vizTitle">タイトル</label><input id="vizTitle" maxlength="80" value="データグラフ"/></div></div><button class="primary-button full-width" id="vizDraw" type="button">グラフを描く</button><canvas aria-label="入力した数値のグラフ" class="tool-canvas" height="430" id="vizCanvas" width="760"></canvas><button class="secondary-button full-width" id="vizDownload" type="button">グラフをPNG保存</button><p class="help-text" id="vizMessage" role="status"></p></section>
+</div>
+</section>
+
+
+
+
+
+</main>
+</body>
+</html>
