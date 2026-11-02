@@ -496,87 +496,43 @@ body { font-size: calc(1rem * var(--access-font-scale, 1)); }
 @media (max-width:640px) { .unit-converter-panel { grid-column:auto; } .unit-all-results { grid-template-columns:1fr; } .unit-converter-panel .two-inputs { grid-template-columns:1fr 1fr; } }
 
 
-/* =========================
-   Aurora AdMax 広告レイアウト
-   左・右：広い画面でサイド表示
-   下：全画面幅で表示
-   ========================= */
-.ad-page-layout {
-  display: grid;
-  grid-template-columns: clamp(100px, 11vw, 160px) minmax(0, 1440px) clamp(100px, 11vw, 160px);
-  justify-content: center;
-  align-items: start;
-  gap: 12px;
-  width: 100%;
-  max-width: 1800px;
-  margin: 0 auto;
+/* Aurora AdMax: single bottom placement */
+.admax-bottom-section {
+  width: min(100% - 32px, 1100px);
+  margin: 18px auto 28px;
+  padding: 0;
 }
-
-.ad-page-layout > .main-content {
-  width: 100%;
-  min-width: 0;
-  max-width: 1440px;
-  margin: 0;
-}
-
-.side-ad {
-  position: sticky;
-  top: 12px;
+.admax-bottom-slot {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  gap: 6px;
+  min-height: 90px;
   width: 100%;
-  min-width: 0;
-  min-height: 100px;
-  margin-top: 28px;
-  padding: 6px 2px;
-  overflow-wrap: anywhere;
-  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--border, #dce3ee);
+  border-radius: 12px;
+  background: var(--panel, #fff);
 }
-
-.ad-slot-label {
-  margin-bottom: 6px;
-  color: var(--muted);
-  font-size: 10px;
+.admax-label {
+  align-self: flex-start;
+  color: var(--muted, #68758a);
+  font-size: 11px;
   line-height: 1.2;
 }
-
-.side-ad script,
-.bottom-ad script {
-  max-width: 100%;
+.admax-bottom-slot > script {
+  display: block;
 }
-
-.bottom-ad {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: min(100% - 28px, 970px);
-  min-height: 100px;
-  margin: 12px auto 24px;
-  padding: 8px;
-  overflow: hidden;
-  text-align: center;
-}
-
-@media (max-width: 1099px) {
-  .ad-page-layout {
-    display: block;
-  }
-  .side-ad {
-    display: none;
-  }
-  .ad-page-layout > .main-content {
-    margin: 0 auto;
-  }
-}
-
-@media (max-width: 760px) {
-  .bottom-ad {
+@media (max-width: 560px) {
+  .admax-bottom-section {
     width: calc(100% - 20px);
-    min-height: 70px;
-    margin-top: 8px;
-    margin-bottom: 16px;
+    margin: 14px auto 22px;
+  }
+  .admax-bottom-slot {
+    min-height: 60px;
+    padding: 8px;
   }
 }
