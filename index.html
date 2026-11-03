@@ -7,7 +7,8 @@
 <meta content="#eef3fb" name="theme-color"/>
 <title>Aurora 高機能電卓 V10</title>
 <link href="style.css" rel="stylesheet"/>
-<script defer="" src="script.js"></script>
+<script defer src="admax-loader.js"></script>
+<script defer src="script.js"></script>
 </head>
 <body>
 <header class="app-header">
@@ -57,12 +58,8 @@
   <aside class="admax-left-section" aria-label="広告">
     <div class="admax-left-slot">
       <span class="admax-label">広告</span>
-      <!-- AdMax: queue and loader are initialized from script.js to prevent JavaScript source from appearing as page text. -->
-      <div
-        class="admax-ads"
-        data-admax-id="16b8082440abbf054772880ab50e84da"
-        style="display:inline-block;width:160px;height:600px;">
-      </div>
+      <!-- AdMax: initialization is isolated in admax-loader.js. -->
+      <div class="admax-ads" data-admax-id="16b8082440abbf054772880ab50e84da" style="display:inline-block;width:160px;height:600px;"></div>
     </div>
   </aside>
 <main class="main-content">

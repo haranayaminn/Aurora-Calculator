@@ -35,6 +35,27 @@ function saveValue(key, value) {
   }
 }
 
+// 履歴の保存データは古い版・途中で壊れたデータも想定して検証する。
+// 不正な要素があっても、履歴描画で例外が起きない形へ正規化する。
+function normalizeHistoryEntries(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((entry) => entry && typeof entry === "object" && !Array.isArray(entry)
+      && typeof entry.expression === "string"
+      && typeof entry.result === "string")
+    .slice(0, 100)
+    .map((entry) => {
+      const parsedDate = typeof entry.createdAt === "string" ? Date.parse(entry.createdAt) : NaN;
+      return {
+        expression: entry.expression.slice(0, 1000),
+        result: entry.result.slice(0, 1000),
+        kind: typeof entry.kind === "string" ? entry.kind.slice(0, 100) : "通常計算",
+        favorite: entry.favorite === true,
+        createdAt: Number.isFinite(parsedDate) ? new Date(parsedDate).toISOString() : new Date(0).toISOString()
+      };
+    });
+}
+
 function showMessage(selector, message, isError = false) {
   const target = $(selector);
   if (!target) return;
@@ -290,8 +311,12 @@ function evaluateMainExpression(source, options = {}) {
 /* =========================
    3. メイン電卓・履歴・メモリー
    ========================= */
-let history = readSaved(STORAGE_KEYS.history, []);
-if (!Array.isArray(history)) history = [];
+const storedHistory = readSaved(STORAGE_KEYS.history, []);
+let history = normalizeHistoryEntries(storedHistory);
+// 正規化で除外・修復した要素をブラウザー内にも保存し直す。
+if (JSON.stringify(storedHistory) !== JSON.stringify(history)) {
+  saveValue(STORAGE_KEYS.history, history);
+}
 let angleMode = readSaved(STORAGE_KEYS.angle, "DEG");
 if (!['DEG', 'RAD'].includes(angleMode)) angleMode = "DEG";
 let memoryValue = Number(readSaved(STORAGE_KEYS.memory, 0)) || 0;
@@ -643,7 +668,7 @@ $("#importBackupFile").addEventListener("change", async (event) => {
       throw new Error("このアプリのバックアップファイルではありません。");
     }
     if (!confirm("現在の履歴とメモリーを、バックアップの内容で置き換えますか？")) return;
-    history = data.history.filter((item) => item && typeof item.expression === "string" && typeof item.result === "string").slice(0, 100);
+    history = normalizeHistoryEntries(data.history);
     memoryValue = Number.isFinite(Number(data.memoryValue)) ? Number(data.memoryValue) : 0;
     answerValue = Number.isFinite(Number(data.answerValue)) ? Number(data.answerValue) : 0;
     angleMode = data.angleMode === "RAD" ? "RAD" : "DEG";
@@ -2442,7 +2467,7 @@ function makeBackupObject() {
 function restoreBackupObject(data) {
   if (!data || data.format !== "aurora-calculator-backup" || !Array.isArray(data.history)) throw new Error("このアプリのバックアップファイルではありません。");
   if (!confirm("現在の履歴とメモリーをバックアップの内容で置き換えますか？")) return false;
-  history = data.history.filter(item => item && typeof item.expression === "string" && typeof item.result === "string").slice(0, 100);
+  history = normalizeHistoryEntries(data.history);
   memoryValue = Number.isFinite(Number(data.memoryValue)) ? Number(data.memoryValue) : 0;
   answerValue = Number.isFinite(Number(data.answerValue)) ? Number(data.answerValue) : 0;
   angleMode = data.angleMode === "RAD" ? "RAD" : "DEG";
@@ -3708,44 +3733,3 @@ renderNotes();
 refreshNumericSelectors();
 renderDatabase();
 renderNumericDatabase();
-
-
-/* =========================
-   AdMax 非同期初期化
-   広告コードをHTML本文に置かず、外部JS内でキュー登録してから
-   AdMaxローダーを非同期で1回だけ読み込む。
-   ========================= */
-(function initAuroraAdMax() {
-  const adSlot = document.querySelector('.admax-ads[data-admax-id]');
-  if (!adSlot) return;
-
-  const admaxId = (adSlot.dataset.admaxId || '').trim();
-  if (!admaxId) return;
-
-  // 同じページでの二重初期化・二重リクエストを防止する。
-  if (window.__auroraAdMaxInitialized) return;
-  window.__auroraAdMaxInitialized = true;
-
-  // AdMaxのキューを先に登録してから、非同期ローダーを追加する。
-  window.admaxads = window.admaxads || [];
-  window.admaxads.push({ admax_id: admaxId, type: 'banner' });
-
-  const loaderUrl = 'https://adm.shinobi.jp/st/t.js';
-  const alreadyLoaded = Array.from(document.scripts).some((script) => {
-    try {
-      return new URL(script.src, document.baseURI).href === loaderUrl;
-    } catch (error) {
-      return false;
-    }
-  });
-
-  if (!alreadyLoaded) {
-    const loader = document.createElement('script');
-    loader.type = 'text/javascript';
-    loader.charset = 'utf-8';
-    loader.src = loaderUrl;
-    loader.async = true;
-    loader.dataset.auroraAdMaxLoader = 'true';
-    document.head.appendChild(loader);
-  }
-})();
