@@ -7,8 +7,8 @@
 <meta content="#eef3fb" name="theme-color"/>
 <title>Aurora 高機能電卓 V10</title>
 <link href="style.css" rel="stylesheet"/>
-<script defer src="admax-loader.js"></script>
-<script defer src="script.js"></script>
+<script defer src="admax-loader.js?v=2"></script>
+<script defer src="script.js?v=2"></script>
 </head>
 <body>
 <header class="app-header">
@@ -58,8 +58,11 @@
   <aside class="admax-left-section" aria-label="広告">
     <div class="admax-left-slot">
       <span class="admax-label">広告</span>
-      <!-- AdMax: initialization is isolated in admax-loader.js. -->
-      <div class="admax-ads" data-admax-id="16b8082440abbf054772880ab50e84da" style="display:inline-block;width:160px;height:600px;"></div>
+      <!-- AdMax: the loader is isolated from the calculator application. -->
+      <div class="admax-ad-frame" id="admaxAdFrame" data-admax-state="loading">
+        <div class="admax-status" id="admaxStatus" role="status" aria-live="polite">広告を読み込み中…</div>
+        <div class="admax-ads" data-admax-id="16b8082440abbf054772880ab50e84da" style="display:inline-block;width:160px;height:600px;"></div>
+      </div>
     </div>
   </aside>
 <main class="main-content">
