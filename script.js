@@ -3708,3 +3708,44 @@ renderNotes();
 refreshNumericSelectors();
 renderDatabase();
 renderNumericDatabase();
+
+
+/* =========================
+   AdMax 非同期初期化
+   広告コードをHTML本文に置かず、外部JS内でキュー登録してから
+   AdMaxローダーを非同期で1回だけ読み込む。
+   ========================= */
+(function initAuroraAdMax() {
+  const adSlot = document.querySelector('.admax-ads[data-admax-id]');
+  if (!adSlot) return;
+
+  const admaxId = (adSlot.dataset.admaxId || '').trim();
+  if (!admaxId) return;
+
+  // 同じページでの二重初期化・二重リクエストを防止する。
+  if (window.__auroraAdMaxInitialized) return;
+  window.__auroraAdMaxInitialized = true;
+
+  // AdMaxのキューを先に登録してから、非同期ローダーを追加する。
+  window.admaxads = window.admaxads || [];
+  window.admaxads.push({ admax_id: admaxId, type: 'banner' });
+
+  const loaderUrl = 'https://adm.shinobi.jp/st/t.js';
+  const alreadyLoaded = Array.from(document.scripts).some((script) => {
+    try {
+      return new URL(script.src, document.baseURI).href === loaderUrl;
+    } catch (error) {
+      return false;
+    }
+  });
+
+  if (!alreadyLoaded) {
+    const loader = document.createElement('script');
+    loader.type = 'text/javascript';
+    loader.charset = 'utf-8';
+    loader.src = loaderUrl;
+    loader.async = true;
+    loader.dataset.auroraAdMaxLoader = 'true';
+    document.head.appendChild(loader);
+  }
+})();
